@@ -1,4 +1,5 @@
 .idea
+build/*
 src/main/resources/home
 src/main/resources/*.zip
 .gradle
