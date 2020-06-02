@@ -12,6 +12,7 @@ wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/data1.zip
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/data2.zip
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/instruments.zip
 unzip data1.zip && unzip data2.zip && unzip instruments.zip
+rm *.zip
 ```
 
 ## Requirements
