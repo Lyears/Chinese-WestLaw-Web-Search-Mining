@@ -7,7 +7,7 @@ with court records of legal cases in China in Chinese.
 You can download raw data and feed it into our system as follows.
 
 ```
-cd src/main/resources
+cd $DATA_ROOT_DIR$
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/data1.zip
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/data2.zip
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/instruments.zip
