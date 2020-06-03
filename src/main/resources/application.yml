@@ -1,0 +1,6 @@
+spring:
+  freemarker:
+    cache: false
+  thymeleaf:
+    cache: false
+    mode: HTML5
