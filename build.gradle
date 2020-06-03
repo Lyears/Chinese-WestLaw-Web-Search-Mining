@@ -32,3 +32,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+this.tasks.create('initation') {
+    setGroup('build')
+    setDescription('load environment variable ')
+    doFirst {
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR")
+        println(wsmRootDir)
+    }
+}
