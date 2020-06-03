@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourtInfoZXGK {
+public class CourtInfoZxgk {
 
     @JSONField(name = "id")
     private int id;
@@ -24,8 +26,8 @@ public class CourtInfoZXGK {
     private String sexy;
     @JSONField(name = "cardNum")
     private String cardNum;
-    @JSONField(name = "bussinessEntity")
-    private String bussinessEntity;
+    @JSONField(name = "businessEntity")
+    private String businessEntity;
     @JSONField(name = "courtName")
     private String courtName;
     @JSONField(name = "areaName")
@@ -34,8 +36,8 @@ public class CourtInfoZXGK {
     private String partyTypeName;
     @JSONField(name = "gistId")
     private String gistId;
-    @JSONField(name = "regDate")
-    private String regDate;
+    @JSONField(name = "regDate", format = "yyyy年MM月dd日")
+    private LocalDate regDate;
     @JSONField(name = "gistUnit")
     private String gistUnit;
     @JSONField(name = "duty")
@@ -46,10 +48,10 @@ public class CourtInfoZXGK {
     private String performedPart;
     @JSONField(name = "unperformPart")
     private String unperformPart;
-    @JSONField(name = "disruptedTypeName")
+    @JSONField(name = "disruptTypeName")
     private String disruptTypeName;
-    @JSONField(name = "publishDate")
-    private String publishDate;
+    @JSONField(name = "publishDate", format = "yyyy年MM月dd日")
+    private LocalDate publishDate;
     @JSONField(name = "qysler")
-    private PeopleInfoZXGK[] peopleInfo;
+    private PeopleInfoZxgk[] peopleInfo;
 }

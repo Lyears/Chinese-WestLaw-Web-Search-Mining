@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class PeopleInfoZXGK {
+public class PeopleInfoZxgk {
 
     @JSONField(name = "cardNum")
     private String cardNum;
