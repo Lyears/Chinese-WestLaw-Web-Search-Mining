@@ -120,8 +120,9 @@ public class CourtInfoLoader {
                 Pattern regex = Pattern.compile(pattern);
                 Matcher match = regex.matcher(courtAndPhone);
                 if (match.find()){
-                    courtInfo.setCourtName(courtAndPhone.substring(0, match.start()).trim());
-                    courtInfo.setCourtPhone(match.group(1));
+                    courtInfo.setCourtName(courtAndPhone.substring(0, match.start()).
+                            replace('\u00A0', ' ').trim());
+                    courtInfo.setCourtPhone(match.group(0).trim());
                 }
             }
             return courtInfo;
@@ -137,7 +138,7 @@ public class CourtInfoLoader {
             courtInfo.setCaseCode(courtInstrumentHshfy.getCaseCode());
             courtInfo.setTheme(courtInstrumentHshfy.getTheme());
             courtInfo.setType(courtInstrumentHshfy.getType());
-            courtInfo.setCause(courtInstrumentHshfy.getCause());
+            courtInfo.setCause(courtInstrumentHshfy.getCause().replace('\u00A0', ' ').trim());
             courtInfo.setCourtName(courtInstrumentHshfy.getCourtName());
             courtInfo.setCourtLevel(courtInstrumentHshfy.getCourtLevel());
             courtInfo.setCaseDue(courtInstrumentHshfy.getCaseDue());

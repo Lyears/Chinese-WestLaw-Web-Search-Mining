@@ -36,6 +36,5 @@ public class IndexConstruction {
         System.out.println(JSON.toJSONString(CourtInfoLoader.createCourtInfoFromAllFormats(courtInfoHshfy)));
         System.out.println(JSON.toJSONString(CourtInfoLoader.createCourtInfoFromAllFormats(instrumentInfo)));
         System.out.println(JSON.toJSONString(CourtInfoLoader.createCourtInfoFromAllFormats(courtInfoZxgk)));
-
     }
 }
