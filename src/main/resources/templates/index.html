@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th = "http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
     <title>Chinese-WestLaw-Web-Search-Mining</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
 </head>
@@ -16,12 +17,6 @@
         <li class="nav-item active">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="#">Category</a>-->
-<!--        </li>-->
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
-<!--        </li>-->
     </ul>
 
 </nav>
@@ -36,10 +31,16 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-12 align-content-center">
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary">Left</button>
-                <button type="button" class="btn btn-secondary">Middle</button>
-                <button type="button" class="btn btn-secondary">Right</button>
+            <div class="btn-group btn-group-toggle" role="group" data-toggle="buttons" id="searchType" aria-label="Basic Search Type">
+                <label class="btn btn-secondary active">
+                    <input type="radio" name="options" id="boolean" checked> Boolean
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="options" id="one-shot"> One-Shot
+                </label>
+                <label class="btn btn-secondary">
+                    <input type="radio" name="options" id="query"> Query
+                </label>
             </div>
         </div>
     </div>
@@ -52,10 +53,12 @@
                     <button type="button" class="btn btn-outline-dark dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search
                     </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">1</a>
-                        <a class="dropdown-item" href="#">2</a>
-                        <a class="dropdown-item" href="#">3</a>
+                    <div class="dropdown-menu" id="sortType">
+                        <a class="dropdown-item" href="#">Sorted by Age</a>
+                        <a class="dropdown-item" href="#">Sorted by Date</a>
+                        <a class="dropdown-item" href="#">Sorted by Name</a>
+                        <a class="dropdown-item" href="#">Sorted by Age</a>
+                        <a class="dropdown-item" href="#">Sorted by Age</a>
                     </div>
                 </div>
             </div>
@@ -72,5 +75,6 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <script src="https://unpkg.com/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
