@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 
 /*
@@ -56,4 +57,18 @@ public class CourtInfo {
     private LocalDate caseDue;
     private String content;
 
+    /**
+     * get field value bu field name, with JAVA reflect
+     * @param fieldName the field Name
+     * @param object the java object
+     * @return the returned field
+     */
+    public String getFieldValueByFieldName(String fieldName, Object object) {
+        try {
+            Field field = object.getClass().getField(fieldName);
+            return (String) field.get(object);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

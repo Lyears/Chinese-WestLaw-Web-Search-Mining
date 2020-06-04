@@ -5,8 +5,6 @@ import wsm.models.CourtInfoHshfy;
 import wsm.models.CourtInfoZxgk;
 import wsm.models.CourtInstrumentHshfy;
 
-import java.io.IOException;
-import java.util.HashMap;
 
 public class IndexConstruction {
 
