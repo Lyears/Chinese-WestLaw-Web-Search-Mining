@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class IndexConstruction {
 
     // version1: test function for building the no word cut Index
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         // the root dir for wsm dataset (the folder of unzipping *.zip)
         String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";

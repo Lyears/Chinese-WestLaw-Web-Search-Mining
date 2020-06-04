@@ -8,8 +8,6 @@ import wsm.models.CourtInfoZxgk;
 import wsm.models.CourtInstrumentHshfy;
 
 import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,37 +17,50 @@ public class CourtInfoLoader {
      * load a CountInfoHshfy object from doc file
      * @param docPath the document path
      * @return a CourtInfoHshfy object
-     * @throws IOException io exception
      */
-    public static CourtInfoHshfy loadCourtInfoHshfyFromDoc(String docPath) throws IOException {
+    public static CourtInfoHshfy loadCourtInfoHshfyFromDoc(String docPath) {
         File file = new File(docPath);
-        String jsonString = FileUtils.readFileToString(file, "UTF-8");
-        return JSON.parseObject(jsonString, CourtInfoHshfy.class);
+        try {
+            String jsonString = FileUtils.readFileToString(file, "UTF-8");
+            return JSON.parseObject(jsonString, CourtInfoHshfy.class);
+        } catch (Exception e) {
+            System.out.printf("Error happens when loading a CourtInfoHshfy Object from file, %s", e);
+            return null;
+        }
     }
 
     /**
      * load a CountInfoZxgk object from doc file
      * @param docPath the document path
      * @return a CourtInfoZxgk object
-     * @throws IOException io exception
      */
-    public static CourtInfoZxgk loadCourtInfoZxgkFromDoc(String docPath) throws IOException {
+    public static CourtInfoZxgk loadCourtInfoZxgkFromDoc(String docPath) {
         File file = new File(docPath);
-        String jsonString = FileUtils.readFileToString(file, "UTF-8");
-        return JSON.parseObject(jsonString, CourtInfoZxgk.class);
+        try {
+            String jsonString = FileUtils.readFileToString(file, "UTF-8");
+            return JSON.parseObject(jsonString, CourtInfoZxgk.class);
+        } catch (Exception e) {
+            System.out.printf("Error happens when loading a CourtInfoZxgk Object from file, %s", e);
+            return null;
+        }
+
     }
 
     /**
      * load a CountInstrument object from doc file
      * @param docPath the document path
      * @return a CourtInstrument object
-     * @throws IOException io exception
      */
-    public static CourtInstrumentHshfy loadCourtInstrumentFromDoc(String docPath) throws IOException {
+    public static CourtInstrumentHshfy loadCourtInstrumentFromDoc(String docPath) {
 
         File file = new File(docPath);
-        String jsonString = FileUtils.readFileToString(file, "UTF-8");
-        return JSON.parseObject(jsonString, CourtInstrumentHshfy.class);
+        try {
+            String jsonString = FileUtils.readFileToString(file, "UTF-8");
+            return JSON.parseObject(jsonString, CourtInstrumentHshfy.class);
+        } catch (Exception e) {
+            System.out.printf("Error happens when loading a CourtInstrumentHshfy Object from file, %s", e);
+            return null;
+        }
     }
 
     /**
@@ -109,7 +120,7 @@ public class CourtInfoLoader {
                 Pattern regex = Pattern.compile(pattern);
                 Matcher match = regex.matcher(courtAndPhone);
                 if (match.find()){
-                    courtInfo.setCourtName(courtAndPhone.substring(0, match.start()));
+                    courtInfo.setCourtName(courtAndPhone.substring(0, match.start()).trim());
                     courtInfo.setCourtPhone(match.group(1));
                 }
             }
