@@ -3,4 +3,4 @@ spring:
     cache: false
   thymeleaf:
     cache: false
-    mode: HTML5
+    mode: HTML
