@@ -4,6 +4,7 @@ import wsm.models.CourtInfo;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
 
 public class IndexNoWordCut extends IndexAbstract{
@@ -19,16 +20,30 @@ public class IndexNoWordCut extends IndexAbstract{
     }
 
     @Override
-    public void updateFromCourtInfo(CourtInfo courtInfo) {
+    public void updateFromCourtInfo(List<Integer> docId, List<CourtInfo> courtInfo) {
 
-        // only get the field with field name equal to keyword
-        String noSplitString = courtInfo.getFieldValueByFieldName(keyWord, courtInfo);
-        return;
+        if (docId == null || courtInfo == null || docId.size() != courtInfo.size()) {
+            System.out.println("Update Index from CourtInfo fails.");
+            return;
+        }
 
+        // update index for every courtInfo
+        for (int i = 0; i < docId.size(); i++){
+            // only get the field with field name equal to keyword
+            String noSplitString = courtInfo.get(i).getFieldValueByFieldName(keyWord, courtInfo);
+            if (noSplitString == null){
+                continue;
+            }
+            inverseIndex.get(noSplitString).add(docId.get(i));
+        }
     }
 
     @Override
     public TreeSet<Integer> queryFromRequestString(String queryString) {
+
+        if (inverseIndex.containsKey(queryString)) {
+            return inverseIndex.get(queryString);
+        }
         return null;
     }
 

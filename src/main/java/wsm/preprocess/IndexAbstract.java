@@ -2,15 +2,17 @@ package wsm.preprocess;
 
 import wsm.models.CourtInfo;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
 
 public abstract class IndexAbstract {
 
     /**
      * update the index from courtInfo
+     * @param docId the docID list
      * @param courtInfo the courtInfo object
      */
-    public abstract void updateFromCourtInfo(CourtInfo courtInfo);
+    public abstract void updateFromCourtInfo(List<Integer> docId, List<CourtInfo> courtInfo);
 
     /**
      * process a request query string with index
