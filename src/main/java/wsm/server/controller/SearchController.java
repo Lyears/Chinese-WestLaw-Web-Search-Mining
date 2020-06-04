@@ -14,4 +14,9 @@ public class SearchController {
         return mav;
     }
 
+    @RequestMapping("/list")
+    public ModelAndView list(){
+        ModelAndView mav = new ModelAndView("list");
+        return mav;
+    }
 }
