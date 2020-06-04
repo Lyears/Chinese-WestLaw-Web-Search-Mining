@@ -28,12 +28,12 @@ public class IndexNoWordCut extends IndexAbstract{
     }
 
     @Override
-    public LinkedList<Integer> queryFromRequestString(String queryString) {
+    public TreeSet<Integer> queryFromRequestString(String queryString) {
         return null;
     }
 
     @Override
-    public Integer StoreIndexToDisk(String fileName) {
+    public Integer storeIndexToDisk(String fileName) {
         return null;
     }
 

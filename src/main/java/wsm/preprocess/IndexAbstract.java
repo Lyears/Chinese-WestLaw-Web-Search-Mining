@@ -2,6 +2,7 @@ package wsm.preprocess;
 
 import wsm.models.CourtInfo;
 import java.util.LinkedList;
+import java.util.TreeSet;
 
 public abstract class IndexAbstract {
 
@@ -14,10 +15,10 @@ public abstract class IndexAbstract {
     /**
      * process a request query string with index
      * return a posting List from a query string
-     * @param queryString the String for quering
+     * @param queryString the String for querying
      * @return the posting list
      */
-    public abstract LinkedList<Integer> queryFromRequestString(String queryString);
+    public abstract TreeSet<Integer> queryFromRequestString(String queryString);
 
 
     /**
@@ -25,7 +26,7 @@ public abstract class IndexAbstract {
      * @param fileName the index file path
      * @return the number of bytes written
      */
-    public abstract Integer StoreIndexToDisk(String fileName);
+    public abstract Integer storeIndexToDisk(String fileName);
 
     /**
      * recover an index from an index file
