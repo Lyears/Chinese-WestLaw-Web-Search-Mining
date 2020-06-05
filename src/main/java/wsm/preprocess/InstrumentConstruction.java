@@ -8,12 +8,11 @@ import java.util.TreeSet;
 
 
 public class InstrumentConstruction {
-
+    // the root dir for wsm dataset (the folder of unzipping *.zip)
+    private static final String wsmRootDir = "/home/zmfan/Data/WSM";
     // version1: test function for building the no word cut Index
     public static void main(String[] args) {
 
-        // the root dir for wsm dataset (the folder of unzipping *.zip)
-        String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
         // System.out.println(System.getenv("WSM_ROOT_DIR"));
 
         // construct an index for id -> doc
@@ -21,7 +20,7 @@ public class InstrumentConstruction {
         ArrayList<Integer> docIdOffset = new ArrayList<>();
         docIdOffset.addAll(docIdOffsetList);
         ArrayList<Integer> docNumList = new ArrayList<>();
-        IndexIdToDoc indexIdToDoc = wsm.preprocess.IndexConstruction.constructCourtInfoMapFromDisk(
+        IndexIdToDoc indexIdToDoc = InstrumentConstruction.constructInstrumentMapFromDisk(
                 wsmRootDir, docIdOffset, docNumList);
 
         // update the index from all CourtInfos
@@ -37,6 +36,27 @@ public class InstrumentConstruction {
         System.out.println(contentList.size());
         System.out.println(contentList.get(0));
         System.out.println(contentList.get(contentList.size()-1));
+    }
+
+    public static List<String> getInstrumentContentList(){
+
+        List<Integer> docIdOffsetList = Arrays.asList(0, 10000000, 20000000);
+        ArrayList<Integer> docIdOffset = new ArrayList<>();
+        docIdOffset.addAll(docIdOffsetList);
+        ArrayList<Integer> docNumList = new ArrayList<>();
+        IndexIdToDoc indexIdToDoc = InstrumentConstruction.constructInstrumentMapFromDisk(
+                wsmRootDir, docIdOffset, docNumList);
+
+        // update the index from all CourtInfos
+        // maximum update entry number
+        List<String> contentList = new ArrayList<>();
+        for (int docId = docIdOffset.get(1); docId < docIdOffset.get(1) + docNumList.get(1); docId++){
+
+            CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
+                    indexIdToDoc.getDocFileNameFromID(docId), docId, docIdOffset);
+            contentList.add(courtInfo.getContent());
+        }
+        return contentList;
     }
 
 
