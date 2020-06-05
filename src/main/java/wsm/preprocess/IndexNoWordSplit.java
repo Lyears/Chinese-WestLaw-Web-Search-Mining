@@ -1,6 +1,7 @@
 package wsm.preprocess;
 
 import wsm.models.CourtInfo;
+import wsm.models.PeopleInfoZxgk;
 import wsm.utils.DiskIOHandler;
 
 import java.io.Serializable;
@@ -26,7 +27,7 @@ public class IndexNoWordSplit extends IndexAbstract implements Serializable {
     public void updateFromCourtInfo(List<Integer> docId, List<CourtInfo> courtInfo) {
 
         if (docId == null || courtInfo == null || docId.size() != courtInfo.size()) {
-            System.out.println("Update Index from CourtInfo fails.");
+            System.out.println("Update No-Word-Split Index from CourtInfo fails.");
             return;
         }
 
@@ -41,6 +42,20 @@ public class IndexNoWordSplit extends IndexAbstract implements Serializable {
                 inverseIndex.put(noSplitString, new TreeSet<>());
             }
             inverseIndex.get(noSplitString).add(docId.get(i));
+            // process the sublist qysler in CourtInfo
+            if (courtInfo.get(i).getPeopleInfo() == null){
+                continue;
+            }
+            for (PeopleInfoZxgk peopleInfoZxgk : courtInfo.get(i).getPeopleInfo()){
+                noSplitString = peopleInfoZxgk.getFieldValueByFieldName(keyWord, peopleInfoZxgk);
+                if (noSplitString == null){
+                    continue;
+                }
+                if (!inverseIndex.containsKey(noSplitString)){
+                    inverseIndex.put(noSplitString, new TreeSet<>());
+                }
+                inverseIndex.get(noSplitString).add(docId.get(i));
+            }
         }
     }
 

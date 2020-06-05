@@ -30,7 +30,7 @@ public class IndexLocalDate extends IndexAbstract implements Serializable {
     public void updateFromCourtInfo(List<Integer> docId, List<CourtInfo> courtInfo) {
 
         if (docId == null || courtInfo == null || docId.size() != courtInfo.size()) {
-            System.out.println("Update Index from CourtInfo fails.");
+            System.out.println("Update LocalDate Index from CourtInfo fails.");
             return;
         }
 

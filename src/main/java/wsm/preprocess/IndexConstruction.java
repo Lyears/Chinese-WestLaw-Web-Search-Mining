@@ -17,22 +17,31 @@ public class IndexConstruction {
         // System.out.println(System.getenv("WSM_ROOT_DIR"));
 
         // construct an index for id -> doc
-        List<Integer> docIdOffsetList = Arrays.asList(0, 10000000, 20000000);
-        ArrayList<Integer> docIdOffset = new ArrayList<>();
-        docIdOffset.addAll(docIdOffsetList);
         ArrayList<Integer> docNumList = new ArrayList<>();
         IndexIdToDoc indexIdToDoc = IndexConstruction.constructCourtInfoMapFromDisk(
-                wsmRootDir, docIdOffset, docNumList);
+                wsmRootDir, docNumList);
 
-        // a test NoWordCutIndex
-        String keyWord1 = "caseCode";
-        IndexNoWordSplit indexNoWordSplit = new IndexNoWordSplit(keyWord1);
+        // construct a Boolean index collection (for all fields)
+        BooleanIndexCollection booleanIndexCollection = createIndexCollectionFromDocs(indexIdToDoc, docNumList);
 
-        // update the index from all CourtInfos
+        // test a query
+        booleanIndexCollection.storeIndexToDisk(wsmRootDir);
+
+    }
+
+    public static BooleanIndexCollection createIndexCollectionFromDocs(
+            IndexIdToDoc indexIdToDoc, List<Integer> docNumList) {
+
+        // feedback
+        BooleanIndexCollection feedback = new BooleanIndexCollection();
+
+        // update the Boolean Index Collection from all CourtInfos
         // maximum update entry number
-        int maximumEntryUpdateNumber = 1000;
+        int maximumEntryUpdateNumber = 2500;
         ArrayList<Integer> docIdList = new ArrayList<>();
         ArrayList<CourtInfo> courtInfos = new ArrayList<>();
+        List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
+
         for (int i = 0; i < docIdOffset.size()-2; i++){
             for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++){
 
@@ -46,30 +55,29 @@ public class IndexConstruction {
                 if (docIdList.size() == maximumEntryUpdateNumber ||
                         docId == docIdOffset.get(i) + docNumList.get(i) - 1){
                     System.out.printf("Update index, current docId %d\n", docId);
-                    indexNoWordSplit.updateFromCourtInfo(docIdList, courtInfos);
+                    feedback.updateFromCourtInfo(docIdList, courtInfos);
                     docIdList.clear();
                     courtInfos.clear();
                 }
             }
         }
-
-        // test a query
-        TreeSet<Integer> res1 = indexNoWordSplit.queryFromRequestString("（1997）崇执字第308号");
-        indexNoWordSplit.storeIndexToDisk(wsmRootDir);
-        System.out.println(res1);
-        CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
-                indexIdToDoc.getDocFileNameFromID(res1.first()), res1.first(), docIdOffset);
-
+        return feedback;
     }
 
 
+    /**
+     * construct a docId -> fileName index from wsmRootDir, and also create a list for number of docs
+     * @param wsmRootDir the wsm root dir
+     * @param docNumList also an implicit return parameter, the number of documents for all three dataset
+     * @return the constructed index, from docId -> fileName
+     */
     public static IndexIdToDoc constructCourtInfoMapFromDisk(String wsmRootDir,
-                                                             ArrayList<Integer> docIdOffset,
                                                              ArrayList<Integer> docNumList) {
         // read document list from three sub dirs
         String hshfySubDir = wsmRootDir + "/home/data/law/hshfy/info";
         String instrumentSubdir = wsmRootDir + "/home/data/law/hshfy_wenshu";
         String zxgkSubDir = wsmRootDir + "/home/data/law/zxgk";
+        List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
 
         // the doc to file hash map
         IndexIdToDoc indexIdToDoc = new IndexIdToDoc();

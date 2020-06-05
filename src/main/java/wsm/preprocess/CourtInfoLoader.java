@@ -2,10 +2,7 @@ package wsm.preprocess;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.FileUtils;
-import wsm.models.CourtInfo;
-import wsm.models.CourtInfoHshfy;
-import wsm.models.CourtInfoZxgk;
-import wsm.models.CourtInstrumentHshfy;
+import wsm.models.*;
 
 import java.io.File;
 import java.util.List;
@@ -81,25 +78,34 @@ public class CourtInfoLoader {
 
             // fill in all possessed fields
             courtInfo.setAge(courtInfoZxgk.getAge());
-            courtInfo.setAreaName(courtInfoZxgk.getAreaName());
+            courtInfo.setAreaName(courtInfoZxgk.getAreaName().replace('\u00A0', ' ').trim());
             courtInfo.setId(courtInfoZxgk.getId());
-            courtInfo.setIname(courtInfoZxgk.getIname());
-            courtInfo.setCaseCode(courtInfoZxgk.getCaseCode());
-            courtInfo.setSexy(courtInfoZxgk.getSexy());
-            courtInfo.setBusinessEntity(courtInfoZxgk.getBusinessEntity());
-            courtInfo.setCardNum(courtInfoZxgk.getCardNum());
-            courtInfo.setCourtName(courtInfoZxgk.getCourtName());
-            courtInfo.setPartyTypeName(courtInfoZxgk.getPartyTypeName());
-            courtInfo.setGistId(courtInfoZxgk.getGistId());
+            courtInfo.setIname(courtInfoZxgk.getIname().replace('\u00A0', ' ').trim());
+            courtInfo.setCaseCode(courtInfoZxgk.getCaseCode().replace('\u00A0', ' ').trim());
+            courtInfo.setSexy(courtInfoZxgk.getSexy().replace('\u00A0', ' ').trim());
+            courtInfo.setBusinessEntity(courtInfoZxgk.getBusinessEntity().replace('\u00A0', ' ').trim());
+            courtInfo.setCardNum(courtInfoZxgk.getCardNum().replace('\u00A0', ' ').trim());
+            courtInfo.setCourtName(courtInfoZxgk.getCourtName().replace('\u00A0', ' ').trim());
+            courtInfo.setPartyTypeName(courtInfoZxgk.getPartyTypeName().replace('\u00A0', ' ').trim());
+            courtInfo.setGistId(courtInfoZxgk.getGistId().replace('\u00A0', ' ').trim());
             courtInfo.setRegDate(courtInfoZxgk.getRegDate());
-            courtInfo.setGistUnit(courtInfoZxgk.getGistUnit());
-            courtInfo.setDuty(courtInfoZxgk.getDuty());
-            courtInfo.setPerformance(courtInfoZxgk.getPerformance());
-            courtInfo.setPerformedPart(courtInfoZxgk.getPerformedPart());
-            courtInfo.setDisruptTypeName(courtInfoZxgk.getDisruptTypeName());
+            courtInfo.setGistUnit(courtInfoZxgk.getGistUnit().replace('\u00A0', ' ').trim());
+            courtInfo.setDuty(courtInfoZxgk.getDuty().replace('\u00A0', ' ').trim());
+            courtInfo.setPerformance(courtInfoZxgk.getPerformance().replace('\u00A0', ' ').trim());
+            courtInfo.setPerformedPart(courtInfoZxgk.getPerformedPart().replace('\u00A0', ' ').trim());
+            courtInfo.setDisruptTypeName(courtInfoZxgk.getDisruptTypeName().replace('\u00A0', ' ').trim());
             courtInfo.setPublishDate(courtInfoZxgk.getPublishDate());
             courtInfo.setPeopleInfo(courtInfoZxgk.getPeopleInfo());
-            courtInfo.setUnperformPart(courtInfoZxgk.getUnperformPart());
+            courtInfo.setUnperformPart(courtInfoZxgk.getUnperformPart().replace('\u00A0', ' ').trim());
+
+            if (courtInfo.getPeopleInfo() != null){
+                for (PeopleInfoZxgk peopleInfoZxgk: courtInfo.getPeopleInfo()){
+                    peopleInfoZxgk.setCardNum(peopleInfoZxgk.getCardNum().replace('\u00A0', ' ').trim());
+                    peopleInfoZxgk.setIname(peopleInfoZxgk.getIname().replace('\u00A0', ' ').trim());
+                    peopleInfoZxgk.setCorporationtypename(
+                            peopleInfoZxgk.getCorporationtypename().replace('\u00A0', ' ').trim());
+                }
+            }
             return courtInfo;
 
         } else if (courtInfoFormatted instanceof CourtInfoHshfy) {
@@ -109,20 +115,19 @@ public class CourtInfoLoader {
             CourtInfo courtInfo = new CourtInfo();
 
             // fill in all possessed fields
-            courtInfo.setCaseCode(courtInfoHshfy.getCaseCode());
-            courtInfo.setIname(courtInfoHshfy.getIname());
-            courtInfo.setAddress(courtInfoHshfy.getAddress());
-            courtInfo.setMoney(courtInfoHshfy.getMoney());
-            courtInfo.setApplicant(courtInfoHshfy.getApplicant());
-            String courtAndPhone = courtInfoHshfy.getCourtAndPhone();
+            courtInfo.setCaseCode(courtInfoHshfy.getCaseCode().replace('\u00A0', ' ').trim());
+            courtInfo.setIname(courtInfoHshfy.getIname().replace('\u00A0', ' ').trim());
+            courtInfo.setAddress(courtInfoHshfy.getAddress().replace('\u00A0', ' ').trim());
+            courtInfo.setMoney(courtInfoHshfy.getMoney().replace('\u00A0', ' ').trim());
+            courtInfo.setApplicant(courtInfoHshfy.getApplicant().replace('\u00A0', ' ').trim());
+            String courtAndPhone = courtInfoHshfy.getCourtAndPhone().replace('\u00A0', ' ').trim();
             // use regex to match the courtName and Phone number
             if (!courtAndPhone.isBlank()){
                 String pattern = "([\\d,-]+)$";
                 Pattern regex = Pattern.compile(pattern);
                 Matcher match = regex.matcher(courtAndPhone);
                 if (match.find()){
-                    courtInfo.setCourtName(courtAndPhone.substring(0, match.start()).
-                            replace('\u00A0', ' ').trim());
+                    courtInfo.setCourtName(courtAndPhone.substring(0, match.start()).trim());
                     courtInfo.setCourtPhone(match.group(0).trim());
                 }
             }
@@ -135,15 +140,15 @@ public class CourtInfoLoader {
             CourtInfo courtInfo = new CourtInfo();
 
             // fill in all possessed fields
-            courtInfo.setInstrumentId(courtInstrumentHshfy.getInstrumentId());
-            courtInfo.setCaseCode(courtInstrumentHshfy.getCaseCode());
-            courtInfo.setTheme(courtInstrumentHshfy.getTheme());
-            courtInfo.setType(courtInstrumentHshfy.getType());
+            courtInfo.setInstrumentId(courtInstrumentHshfy.getInstrumentId().replace('\u00A0', ' ').trim());
+            courtInfo.setCaseCode(courtInstrumentHshfy.getCaseCode().replace('\u00A0', ' ').trim());
+            courtInfo.setTheme(courtInstrumentHshfy.getTheme().replace('\u00A0', ' ').trim());
+            courtInfo.setType(courtInstrumentHshfy.getType().replace('\u00A0', ' ').trim());
             courtInfo.setCause(courtInstrumentHshfy.getCause().replace('\u00A0', ' ').trim());
-            courtInfo.setCourtName(courtInstrumentHshfy.getCourtName());
-            courtInfo.setCourtLevel(courtInstrumentHshfy.getCourtLevel());
+            courtInfo.setCourtName(courtInstrumentHshfy.getCourtName().replace('\u00A0', ' ').trim());
+            courtInfo.setCourtLevel(courtInstrumentHshfy.getCourtLevel().replace('\u00A0', ' ').trim());
             courtInfo.setCaseDue(courtInstrumentHshfy.getCaseDue());
-            courtInfo.setContent(courtInstrumentHshfy.getContent());
+            courtInfo.setContent(courtInstrumentHshfy.getContent().replace('\u00A0', ' ').trim());
 
             return courtInfo;
 

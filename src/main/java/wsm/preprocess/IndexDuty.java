@@ -19,7 +19,7 @@ public class IndexDuty extends IndexAbstract implements Serializable {
     // the key word for this Index, only the corresponding items will be processed in this index
     private final String[] keyWords = {"duty", "performance", "performedPart", "unperformPart"};
 
-    public IndexDuty(String keyWord) {
+    public IndexDuty() {
         this.inverseIndex = new HashMap<>();
     }
 
@@ -27,7 +27,7 @@ public class IndexDuty extends IndexAbstract implements Serializable {
     public void updateFromCourtInfo(List<Integer> docId, List<CourtInfo> courtInfo) {
 
         if (docId == null || courtInfo == null || docId.size() != courtInfo.size()) {
-            System.out.println("Update Index from CourtInfo fails.");
+            System.out.println("Update Duty Index from CourtInfo fails.");
             return;
         }
 

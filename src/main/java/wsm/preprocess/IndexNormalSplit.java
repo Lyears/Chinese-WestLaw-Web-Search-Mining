@@ -1,6 +1,7 @@
 package wsm.preprocess;
 
 import wsm.models.CourtInfo;
+import wsm.models.PeopleInfoZxgk;
 import wsm.utils.DiskIOHandler;
 import wsm.utils.QuerySplitHandler;
 
@@ -27,7 +28,7 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
     public void updateFromCourtInfo(List<Integer> docId, List<CourtInfo> courtInfo) {
 
         if (docId == null || courtInfo == null || docId.size() != courtInfo.size()) {
-            System.out.println("Update Index from CourtInfo fails.");
+            System.out.println("Update Normal-Split Index from CourtInfo fails.");
             return;
         }
 
@@ -44,6 +45,20 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
                     inverseIndex.put(s, new TreeSet<>());
                 }
                 inverseIndex.get(s).add(docId.get(i));
+            }
+            // process the sublist qysler in CourtInfo
+            if (courtInfo.get(i).getPeopleInfo() == null){
+                continue;
+            }
+            for (PeopleInfoZxgk peopleInfoZxgk : courtInfo.get(i).getPeopleInfo()){
+                stringToSplit = peopleInfoZxgk.getFieldValueByFieldName(keyWord, peopleInfoZxgk);
+                if (stringToSplit == null){
+                    continue;
+                }
+                if (!inverseIndex.containsKey(stringToSplit)){
+                    inverseIndex.put(stringToSplit, new TreeSet<>());
+                }
+                inverseIndex.get(stringToSplit).add(docId.get(i));
             }
         }
     }
