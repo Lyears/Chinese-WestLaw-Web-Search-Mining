@@ -5,7 +5,6 @@ import wsm.utils.DiskIOHandler;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -53,10 +52,6 @@ public class IndexNoWordCut extends IndexAbstract implements Serializable {
         return null;
     }
 
-    /**
-     * store the index into an index file
-     * @param fileRootPath the index root file path
-     */
     @Override
     public void storeIndexToDisk(String fileRootPath){
         String fileName = fileRootPath + "/boolean_index/no_word_cut/" + this.keyWord;

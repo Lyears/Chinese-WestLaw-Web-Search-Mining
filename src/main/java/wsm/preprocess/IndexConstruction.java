@@ -1,12 +1,6 @@
 package wsm.preprocess;
 
-import com.alibaba.fastjson.JSON;
 import wsm.models.CourtInfo;
-import wsm.models.CourtInfoHshfy;
-import wsm.models.CourtInfoZxgk;
-import wsm.models.CourtInstrumentHshfy;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

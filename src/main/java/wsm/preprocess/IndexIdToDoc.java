@@ -46,7 +46,7 @@ public class IndexIdToDoc implements Serializable {
                 sequence += 1;
             }
         }
-        System.out.printf("Totally %d docs are Indexed.\n", sequence);
+        System.out.printf("Totally %d reflection from Id to Document are Indexed.\n", sequence);
         return sequence;
     }
 
