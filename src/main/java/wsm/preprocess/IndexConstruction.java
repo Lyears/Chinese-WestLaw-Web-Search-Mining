@@ -19,7 +19,7 @@ public class IndexConstruction {
     public static void main(String[] args) {
 
         // the root dir for wsm dataset (the folder of unzipping *.zip)
-        String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
+        String wsmRootDir = "/home/zmfan/Data/WSM";
         // System.out.println(System.getenv("WSM_ROOT_DIR"));
 
         // construct an index for id -> doc
@@ -39,7 +39,7 @@ public class IndexConstruction {
         int maximumEntryUpdateNumber = 1000;
         ArrayList<Integer> docIdList = new ArrayList<>();
         ArrayList<CourtInfo> courtInfos = new ArrayList<>();
-        for (int i = 0; i < docIdOffset.size(); i++){
+        for (int i = 0; i < docIdOffset.size()-2; i++){
             for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++){
 
                 CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(

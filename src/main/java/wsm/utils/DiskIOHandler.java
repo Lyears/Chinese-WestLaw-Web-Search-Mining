@@ -9,8 +9,8 @@ public class DiskIOHandler {
 
         File file =new File(filePath);
         File parentFile = file.getParentFile();
-        if(!parentFile.exists()){
-            parentFile.mkdir();
+        if (!parentFile.exists()){
+            parentFile.mkdirs();
         }
 
         FileOutputStream out;
