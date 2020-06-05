@@ -1,7 +1,7 @@
 package wsm.preprocess;
 
 import wsm.models.CourtInfo;
-import java.util.LinkedList;
+
 import java.util.List;
 import java.util.TreeSet;
 
@@ -25,15 +25,8 @@ public abstract class IndexAbstract {
 
     /**
      * store the index into an index file
-     * @param fileName the index file path
-     * @return the number of bytes written
+     * @param fileRootPath the index file path
      */
-    public abstract Integer storeIndexToDisk(String fileName);
+    public abstract void storeIndexToDisk(String fileRootPath);
 
-    /**
-     * recover an index from an index file
-     * @param fileName the index file path
-     * @return the number of bytes read
-     */
-    public abstract Integer recoverIndexFromDisk(String fileName);
 }

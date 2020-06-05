@@ -1,11 +1,14 @@
 package wsm.preprocess;
 
+import wsm.utils.DiskIOHandler;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.LinkedList;
 
-public class IndexIdToDoc {
+public class IndexIdToDoc implements Serializable {
+
+    public static final long serialVersionUID = 362498820111111111L;
 
     // the index Object for docId to DocFileName
     private HashMap<Integer, String> hashMapIdToDoc;
@@ -18,21 +21,22 @@ public class IndexIdToDoc {
      * Traverse the datadir and refresh the hashMap (from docId to docFileName)
      * @param docDirPath the root path for document folder
      * @param docIdOffset the offset for docId generation
+     * @return number of docs processed
      */
-    public void updateMapFromDataset(String docDirPath,
+    public int updateMapFromDataset(String docDirPath,
                                       int docIdOffset) {
 
         File docDirObj = new File(docDirPath);
         if (!docDirObj.exists()) {
-            return;
+            return -1;
         }
 
         File[] files = docDirObj.listFiles();
         if (files == null) {
-            return;
+            return -1;
         }
         // the sequence of doc, accumulate from 1
-        int sequence = 1;
+        int sequence = 0;
 
         // traverse all files
         for (File docFile : files) {
@@ -42,7 +46,8 @@ public class IndexIdToDoc {
                 sequence += 1;
             }
         }
-        System.out.printf("Totally %d docs are Indexed.\n", sequence - 1);
+        System.out.printf("Totally %d docs are Indexed.\n", sequence);
+        return sequence;
     }
 
     /**
@@ -53,6 +58,25 @@ public class IndexIdToDoc {
     public String getDocFileNameFromID(Integer id){
 
         return this.hashMapIdToDoc.getOrDefault(id, "");
+    }
+
+    /**
+     * store the index into an index file
+     * @param fileRootPath the index root file path
+     */
+    public void storeIndexToDisk(String fileRootPath){
+        String fileName = fileRootPath + "/boolean_index/IndexIdToDoc";
+        DiskIOHandler.writeObjectToFile(this, fileName);
+    }
+
+    /**
+     * recover an index from an index file
+     * @param fileRootPath the index file path
+     * @return the recovered IndexIdToDoc object
+     */
+    public static IndexIdToDoc recoverIndexFromDisk(String fileRootPath){
+        String fileName = fileRootPath + "/boolean_index/IndexIdToDoc";
+        return (IndexIdToDoc) DiskIOHandler.readObjectFromFile(fileName);
     }
 
 }

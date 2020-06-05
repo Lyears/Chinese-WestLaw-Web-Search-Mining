@@ -8,6 +8,7 @@ import wsm.models.CourtInfoZxgk;
 import wsm.models.CourtInstrumentHshfy;
 
 import java.io.File;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,7 +86,7 @@ public class CourtInfoLoader {
             courtInfo.setIname(courtInfoZxgk.getIname());
             courtInfo.setCaseCode(courtInfoZxgk.getCaseCode());
             courtInfo.setSexy(courtInfoZxgk.getSexy());
-            courtInfo.setBussinessEntity(courtInfoZxgk.getBusinessEntity());
+            courtInfo.setBusinessEntity(courtInfoZxgk.getBusinessEntity());
             courtInfo.setCardNum(courtInfoZxgk.getCardNum());
             courtInfo.setCourtName(courtInfoZxgk.getCourtName());
             courtInfo.setPartyTypeName(courtInfoZxgk.getPartyTypeName());
@@ -151,4 +152,30 @@ public class CourtInfoLoader {
         }
     }
 
+    /**
+     * a function for directly get CourtInfo from file path
+     * @param docFile the file path
+     * @param docId the docId, used to judge id
+     * @param docIdOffsetList the doc id offset list, e.g. [0,10000000,20000000]
+     * @return the loaded CourtInfo object
+     */
+    public static CourtInfo loadCourtInfoFromDoc(String docFile, int docId, List<Integer> docIdOffsetList) {
+
+       if (docIdOffsetList == null || docIdOffsetList.size() != 3) {
+           System.out.println("Doc Id offset fails, should have 3 elements.");
+       }
+
+       if (docId < docIdOffsetList.get(1) && docId >= docIdOffsetList.get(0)) {
+           return CourtInfoLoader.createCourtInfoFromAllFormats(
+                   CourtInfoLoader.loadCourtInfoHshfyFromDoc(docFile));
+       } else if (docId < docIdOffsetList.get(2)) {
+           return CourtInfoLoader.createCourtInfoFromAllFormats(
+                   CourtInfoLoader.loadCourtInstrumentFromDoc(docFile));
+       } else if (docId >= docIdOffsetList.get(2)){
+            return CourtInfoLoader.createCourtInfoFromAllFormats(
+                    CourtInfoLoader.loadCourtInfoZxgkFromDoc(docFile));
+       }
+       System.out.printf("Cannot load a valid CourtInfo object from disk, docId %d", docId);
+       return null;
+    }
 }

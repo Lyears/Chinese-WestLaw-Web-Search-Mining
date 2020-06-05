@@ -33,7 +33,7 @@ public class CourtInfo {
     private Integer age;
     private String sexy;
     private String cardNum;
-    private String bussinessEntity;
+    private String businessEntity;
     private String areaName;
     private String partyTypeName;
     private String gistId;
@@ -65,7 +65,8 @@ public class CourtInfo {
      */
     public String getFieldValueByFieldName(String fieldName, Object object) {
         try {
-            Field field = object.getClass().getField(fieldName);
+            Field field = object.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
             return (String) field.get(object);
         } catch (Exception e) {
             return null;

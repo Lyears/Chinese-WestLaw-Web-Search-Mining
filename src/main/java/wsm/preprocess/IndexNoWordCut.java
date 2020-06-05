@@ -1,13 +1,17 @@
 package wsm.preprocess;
 
 import wsm.models.CourtInfo;
+import wsm.utils.DiskIOHandler;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
-public class IndexNoWordCut extends IndexAbstract{
+public class IndexNoWordCut extends IndexAbstract implements Serializable {
+
+    public static final long serialVersionUID = 362498820777777777L;
 
     // the posting list for a key (or a term), using TreeSet
     private HashMap<String, TreeSet<Integer>> inverseIndex;
@@ -30,9 +34,12 @@ public class IndexNoWordCut extends IndexAbstract{
         // update index for every courtInfo
         for (int i = 0; i < docId.size(); i++){
             // only get the field with field name equal to keyword
-            String noSplitString = courtInfo.get(i).getFieldValueByFieldName(keyWord, courtInfo);
+            String noSplitString = courtInfo.get(i).getFieldValueByFieldName(keyWord, courtInfo.get(i));
             if (noSplitString == null){
                 continue;
+            }
+            if (!inverseIndex.containsKey(noSplitString)){
+                inverseIndex.put(noSplitString, new TreeSet<>());
             }
             inverseIndex.get(noSplitString).add(docId.get(i));
         }
@@ -40,20 +47,30 @@ public class IndexNoWordCut extends IndexAbstract{
 
     @Override
     public TreeSet<Integer> queryFromRequestString(String queryString) {
-
         if (inverseIndex.containsKey(queryString)) {
             return inverseIndex.get(queryString);
         }
         return null;
     }
 
+    /**
+     * store the index into an index file
+     * @param fileRootPath the index root file path
+     */
     @Override
-    public Integer storeIndexToDisk(String fileName) {
-        return null;
+    public void storeIndexToDisk(String fileRootPath){
+        String fileName = fileRootPath + "/boolean_index/no_word_cut/" + this.keyWord;
+        DiskIOHandler.writeObjectToFile(this, fileName);
     }
 
-    @Override
-    public Integer recoverIndexFromDisk(String fileName) {
-        return null;
+    /**
+     * recover an index from an index file
+     * @param fileRootPath the index file path
+     * @param keyWord the keyword
+     * @return the recovered IndexNoWordCut object
+     */
+    public static IndexNoWordCut recoverIndexFromDisk(String fileRootPath, String keyWord){
+        String fileName = fileRootPath + "/boolean_index/no_word_cut/" + keyWord;
+        return (IndexNoWordCut) DiskIOHandler.readObjectFromFile(fileName);
     }
 }
