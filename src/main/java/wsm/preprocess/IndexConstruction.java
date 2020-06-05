@@ -26,7 +26,7 @@ public class IndexConstruction {
 
         // a test NoWordCutIndex
         String keyWord1 = "caseCode";
-        IndexNoWordCut indexNoWordCut = new IndexNoWordCut(keyWord1);
+        IndexNoWordSplit indexNoWordSplit = new IndexNoWordSplit(keyWord1);
 
         // update the index from all CourtInfos
         // maximum update entry number
@@ -46,7 +46,7 @@ public class IndexConstruction {
                 if (docIdList.size() == maximumEntryUpdateNumber ||
                         docId == docIdOffset.get(i) + docNumList.get(i) - 1){
                     System.out.printf("Update index, current docId %d\n", docId);
-                    indexNoWordCut.updateFromCourtInfo(docIdList, courtInfos);
+                    indexNoWordSplit.updateFromCourtInfo(docIdList, courtInfos);
                     docIdList.clear();
                     courtInfos.clear();
                 }
@@ -54,8 +54,8 @@ public class IndexConstruction {
         }
 
         // test a query
-        TreeSet<Integer> res1 = indexNoWordCut.queryFromRequestString("（1997）崇执字第308号");
-        indexNoWordCut.storeIndexToDisk(wsmRootDir);
+        TreeSet<Integer> res1 = indexNoWordSplit.queryFromRequestString("（1997）崇执字第308号");
+        indexNoWordSplit.storeIndexToDisk(wsmRootDir);
         System.out.println(res1);
         CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
                 indexIdToDoc.getDocFileNameFromID(res1.first()), res1.first(), docIdOffset);

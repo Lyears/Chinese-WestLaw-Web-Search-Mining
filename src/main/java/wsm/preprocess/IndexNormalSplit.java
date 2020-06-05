@@ -2,22 +2,23 @@ package wsm.preprocess;
 
 import wsm.models.CourtInfo;
 import wsm.utils.DiskIOHandler;
+import wsm.utils.QuerySplitHandler;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
-public class IndexNoWordCut extends IndexAbstract implements Serializable {
-
-    public static final long serialVersionUID = 362498820777777777L;
+public class IndexNormalSplit extends IndexAbstract implements Serializable {
+    public static final long serialVersionUID = 362498820888888888L;
 
     // the posting list for a key (or a term), using TreeSet
     private HashMap<String, TreeSet<Integer>> inverseIndex;
     // the key word for this Index, only the corresponding items will be processed in this index
     private String keyWord;
 
-    public IndexNoWordCut(String keyWord) {
+    public IndexNormalSplit(String keyWord) {
         this.inverseIndex = new HashMap<>();
         this.keyWord = keyWord;
     }
@@ -33,14 +34,17 @@ public class IndexNoWordCut extends IndexAbstract implements Serializable {
         // update index for every courtInfo
         for (int i = 0; i < docId.size(); i++){
             // only get the field with field name equal to keyword
-            String noSplitString = courtInfo.get(i).getFieldValueByFieldName(keyWord, courtInfo.get(i));
-            if (noSplitString == null){
+            String stringToSplit = courtInfo.get(i).getFieldValueByFieldName(keyWord, courtInfo.get(i));
+            if (stringToSplit == null){
                 continue;
             }
-            if (!inverseIndex.containsKey(noSplitString)){
-                inverseIndex.put(noSplitString, new TreeSet<>());
+            ArrayList<String> indexKeyList = QuerySplitHandler.indexSplitter(stringToSplit);
+            for (String s : indexKeyList) {
+                if (!inverseIndex.containsKey(s)) {
+                    inverseIndex.put(s, new TreeSet<>());
+                }
+                inverseIndex.get(s).add(docId.get(i));
             }
-            inverseIndex.get(noSplitString).add(docId.get(i));
         }
     }
 
@@ -54,7 +58,7 @@ public class IndexNoWordCut extends IndexAbstract implements Serializable {
 
     @Override
     public void storeIndexToDisk(String fileRootPath){
-        String fileName = fileRootPath + "/boolean_index/no_word_cut/" + this.keyWord;
+        String fileName = fileRootPath + "/boolean_index/normal_split/" + this.keyWord;
         DiskIOHandler.writeObjectToFile(this, fileName);
     }
 
@@ -62,10 +66,10 @@ public class IndexNoWordCut extends IndexAbstract implements Serializable {
      * recover an index from an index file
      * @param fileRootPath the index file path
      * @param keyWord the keyword
-     * @return the recovered IndexNoWordCut object
+     * @return the recovered Index object
      */
-    public static IndexNoWordCut recoverIndexFromDisk(String fileRootPath, String keyWord){
-        String fileName = fileRootPath + "/boolean_index/no_word_cut/" + keyWord;
-        return (IndexNoWordCut) DiskIOHandler.readObjectFromFile(fileName);
+    public static IndexNormalSplit recoverIndexFromDisk(String fileRootPath, String keyWord){
+        String fileName = fileRootPath + "/boolean_index/normal_split/" + keyWord;
+        return (IndexNormalSplit) DiskIOHandler.readObjectFromFile(fileName);
     }
 }
