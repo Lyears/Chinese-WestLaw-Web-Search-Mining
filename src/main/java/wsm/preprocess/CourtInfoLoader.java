@@ -117,7 +117,7 @@ public class CourtInfoLoader {
             String courtAndPhone = courtInfoHshfy.getCourtAndPhone();
             // use regex to match the courtName and Phone number
             if (!courtAndPhone.isBlank()){
-                String pattern = "(\\d+)$";
+                String pattern = "([\\d,-]+)$";
                 Pattern regex = Pattern.compile(pattern);
                 Matcher match = regex.matcher(courtAndPhone);
                 if (match.find()){
