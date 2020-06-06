@@ -1,4 +1,4 @@
-package wsm.preprocess;
+package wsm.engine.auxiliaryIndex;
 
 import wsm.utils.DiskIOHandler;
 

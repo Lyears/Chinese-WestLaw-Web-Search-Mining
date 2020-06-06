@@ -1,10 +1,10 @@
-package wsm.preprocess;
+package wsm.models;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.io.FileUtils;
-import wsm.models.*;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -78,32 +78,41 @@ public class CourtInfoLoader {
 
             // fill in all possessed fields
             courtInfo.setAge(courtInfoZxgk.getAge());
-            courtInfo.setAreaName(courtInfoZxgk.getAreaName().replace('\u00A0', ' ').trim());
+            courtInfo.setAreaName(changeNullToEmpty(courtInfoZxgk.getAreaName()));
             courtInfo.setId(courtInfoZxgk.getId());
-            courtInfo.setIname(courtInfoZxgk.getIname().replace('\u00A0', ' ').trim());
-            courtInfo.setCaseCode(courtInfoZxgk.getCaseCode().replace('\u00A0', ' ').trim());
-            courtInfo.setSexy(courtInfoZxgk.getSexy().replace('\u00A0', ' ').trim());
-            courtInfo.setBusinessEntity(courtInfoZxgk.getBusinessEntity().replace('\u00A0', ' ').trim());
-            courtInfo.setCardNum(courtInfoZxgk.getCardNum().replace('\u00A0', ' ').trim());
-            courtInfo.setCourtName(courtInfoZxgk.getCourtName().replace('\u00A0', ' ').trim());
-            courtInfo.setPartyTypeName(courtInfoZxgk.getPartyTypeName().replace('\u00A0', ' ').trim());
-            courtInfo.setGistId(courtInfoZxgk.getGistId().replace('\u00A0', ' ').trim());
+            courtInfo.setIname(changeNullToEmpty(courtInfoZxgk.getIname()));
+            courtInfo.setCaseCode(changeNullToEmpty(courtInfoZxgk.getCaseCode()));
+            if (courtInfoZxgk.getSexy() != null) {
+                List<String> sexyList = Arrays.asList("男", "男性", "女性", "女");
+                if (sexyList.contains(courtInfoZxgk.getSexy())){
+                    courtInfo.setSexy(changeNullToEmpty(courtInfoZxgk.getSexy()).charAt(0) + "");
+                } else {
+                    courtInfo.setSexy(changeNullToEmpty(courtInfoZxgk.getSexy()));
+                }
+            } else {
+                courtInfo.setSexy("");
+            }
+            courtInfo.setBusinessEntity(changeNullToEmpty(courtInfoZxgk.getBusinessEntity()));
+            courtInfo.setCardNum(changeNullToEmpty(courtInfoZxgk.getCardNum()));
+            courtInfo.setCourtName(changeNullToEmpty(courtInfoZxgk.getCourtName()));
+            courtInfo.setPartyTypeName(changeNullToEmpty(courtInfoZxgk.getPartyTypeName()));
+            courtInfo.setGistId(changeNullToEmpty(courtInfoZxgk.getGistId()));
             courtInfo.setRegDate(courtInfoZxgk.getRegDate());
-            courtInfo.setGistUnit(courtInfoZxgk.getGistUnit().replace('\u00A0', ' ').trim());
-            courtInfo.setDuty(courtInfoZxgk.getDuty().replace('\u00A0', ' ').trim());
-            courtInfo.setPerformance(courtInfoZxgk.getPerformance().replace('\u00A0', ' ').trim());
-            courtInfo.setPerformedPart(courtInfoZxgk.getPerformedPart().replace('\u00A0', ' ').trim());
-            courtInfo.setDisruptTypeName(courtInfoZxgk.getDisruptTypeName().replace('\u00A0', ' ').trim());
+            courtInfo.setGistUnit(changeNullToEmpty(courtInfoZxgk.getGistUnit()));
+            courtInfo.setDuty(changeNullToEmpty(courtInfoZxgk.getDuty()));
+            courtInfo.setPerformance(changeNullToEmpty(courtInfoZxgk.getPerformance()));
+            courtInfo.setPerformedPart(changeNullToEmpty(courtInfoZxgk.getPerformedPart()));
+            courtInfo.setDisruptTypeName(changeNullToEmpty(courtInfoZxgk.getDisruptTypeName()));
             courtInfo.setPublishDate(courtInfoZxgk.getPublishDate());
             courtInfo.setPeopleInfo(courtInfoZxgk.getPeopleInfo());
-            courtInfo.setUnperformPart(courtInfoZxgk.getUnperformPart().replace('\u00A0', ' ').trim());
+            courtInfo.setUnperformPart(changeNullToEmpty(courtInfoZxgk.getUnperformPart()).trim());
 
             if (courtInfo.getPeopleInfo() != null){
                 for (PeopleInfoZxgk peopleInfoZxgk: courtInfo.getPeopleInfo()){
-                    peopleInfoZxgk.setCardNum(peopleInfoZxgk.getCardNum().replace('\u00A0', ' ').trim());
-                    peopleInfoZxgk.setIname(peopleInfoZxgk.getIname().replace('\u00A0', ' ').trim());
+                    peopleInfoZxgk.setCardNum(changeNullToEmpty(peopleInfoZxgk.getCardNum()));
+                    peopleInfoZxgk.setIname(changeNullToEmpty(peopleInfoZxgk.getIname()));
                     peopleInfoZxgk.setCorporationtypename(
-                            peopleInfoZxgk.getCorporationtypename().replace('\u00A0', ' ').trim());
+                            changeNullToEmpty(peopleInfoZxgk.getCorporationtypename()));
                 }
             }
             return courtInfo;
@@ -115,12 +124,12 @@ public class CourtInfoLoader {
             CourtInfo courtInfo = new CourtInfo();
 
             // fill in all possessed fields
-            courtInfo.setCaseCode(courtInfoHshfy.getCaseCode().replace('\u00A0', ' ').trim());
-            courtInfo.setIname(courtInfoHshfy.getIname().replace('\u00A0', ' ').trim());
-            courtInfo.setAddress(courtInfoHshfy.getAddress().replace('\u00A0', ' ').trim());
-            courtInfo.setMoney(courtInfoHshfy.getMoney().replace('\u00A0', ' ').trim());
-            courtInfo.setApplicant(courtInfoHshfy.getApplicant().replace('\u00A0', ' ').trim());
-            String courtAndPhone = courtInfoHshfy.getCourtAndPhone().replace('\u00A0', ' ').trim();
+            courtInfo.setCaseCode(changeNullToEmpty(courtInfoHshfy.getCaseCode()));
+            courtInfo.setIname(changeNullToEmpty(courtInfoHshfy.getIname()));
+            courtInfo.setAddress(changeNullToEmpty(courtInfoHshfy.getAddress()));
+            courtInfo.setMoney(changeNullToEmpty(courtInfoHshfy.getMoney()));
+            courtInfo.setApplicant(changeNullToEmpty(courtInfoHshfy.getApplicant()));
+            String courtAndPhone = changeNullToEmpty(courtInfoHshfy.getCourtAndPhone());
             // use regex to match the courtName and Phone number
             if (!courtAndPhone.isBlank()){
                 String pattern = "([\\d,-]+)$";
@@ -131,6 +140,11 @@ public class CourtInfoLoader {
                     courtInfo.setCourtPhone(match.group(0).trim());
                 }
             }
+            // match nothing, then set as ""
+            if (courtInfo.getCourtName() == null) {
+                courtInfo.setCourtName("");
+                courtInfo.setCourtPhone("");
+            }
             return courtInfo;
 
         } else if (courtInfoFormatted instanceof CourtInstrumentHshfy) {
@@ -140,15 +154,15 @@ public class CourtInfoLoader {
             CourtInfo courtInfo = new CourtInfo();
 
             // fill in all possessed fields
-            courtInfo.setInstrumentId(courtInstrumentHshfy.getInstrumentId().replace('\u00A0', ' ').trim());
-            courtInfo.setCaseCode(courtInstrumentHshfy.getCaseCode().replace('\u00A0', ' ').trim());
-            courtInfo.setTheme(courtInstrumentHshfy.getTheme().replace('\u00A0', ' ').trim());
-            courtInfo.setType(courtInstrumentHshfy.getType().replace('\u00A0', ' ').trim());
-            courtInfo.setCause(courtInstrumentHshfy.getCause().replace('\u00A0', ' ').trim());
-            courtInfo.setCourtName(courtInstrumentHshfy.getCourtName().replace('\u00A0', ' ').trim());
-            courtInfo.setCourtLevel(courtInstrumentHshfy.getCourtLevel().replace('\u00A0', ' ').trim());
+            courtInfo.setInstrumentId(changeNullToEmpty(courtInstrumentHshfy.getInstrumentId()));
+            courtInfo.setCaseCode(changeNullToEmpty(courtInstrumentHshfy.getCaseCode()));
+            courtInfo.setTheme(changeNullToEmpty(courtInstrumentHshfy.getTheme()));
+            courtInfo.setType(changeNullToEmpty(courtInstrumentHshfy.getType()));
+            courtInfo.setCause(changeNullToEmpty(courtInstrumentHshfy.getCause()));
+            courtInfo.setCourtName(changeNullToEmpty(courtInstrumentHshfy.getCourtName()));
+            courtInfo.setCourtLevel(changeNullToEmpty(courtInstrumentHshfy.getCourtLevel()));
             courtInfo.setCaseDue(courtInstrumentHshfy.getCaseDue());
-            courtInfo.setContent(courtInstrumentHshfy.getContent().replace('\u00A0', ' ').trim());
+            courtInfo.setContent(changeNullToEmpty(courtInstrumentHshfy.getContent()));
 
             return courtInfo;
 
@@ -182,5 +196,13 @@ public class CourtInfoLoader {
        }
        System.out.printf("Cannot load a valid CourtInfo object from disk, docId %d", docId);
        return null;
+    }
+
+    private static String changeNullToEmpty(String str){
+        if (str == null){
+            return "";
+        } else {
+            return str.replace('\u00A0', ' ').trim();
+        }
     }
 }

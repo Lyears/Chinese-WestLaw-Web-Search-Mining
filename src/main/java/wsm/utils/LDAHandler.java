@@ -8,7 +8,7 @@ import org.ansj.app.keyword.KeyWordComputer;
 import org.ansj.app.keyword.Keyword;
 import org.ansj.recognition.impl.StopRecognition;
 import org.ansj.splitWord.analysis.NlpAnalysis;
-import wsm.preprocess.InstrumentConstruction;
+import wsm.engine.InstrumentConstruction;
 
 import java.util.Collection;
 import java.util.List;

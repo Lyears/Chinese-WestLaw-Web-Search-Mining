@@ -1,4 +1,4 @@
-package wsm.preprocess;
+package wsm.engine.auxiliaryIndex;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +11,11 @@ public class IndexConsts {
 
     // the keys that need no split
     public static final List<String> noSplitKeys =
-            Arrays.asList("id", "age", "sexy", "cardNum", "areaName");
+            Arrays.asList("id", "age", "sexy", "cardNum", "areaName", "iname");
 
     // the keys that need normal split
     public static final List<String> normalSplitKeys =
-            Arrays.asList("iname", "courtName", "gistId", "gistUnit",
+            Arrays.asList("courtName", "gistId", "gistUnit",
                     "disruptTypeName", "businessEntity", "corporationtypename");
 
     // the keys that need LocalDate split

@@ -1,30 +1,33 @@
-package wsm.preprocess;
+package wsm.engine.booleanIndex;
 
 import wsm.models.CourtInfo;
+import wsm.models.CourtInfoLoader;
+import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.engine.auxiliaryIndex.IndexIdToDoc;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeSet;
 
 
-public class IndexConstruction {
+public class BooleanIndexConstruction {
 
     // version1: test function for building the no word cut Index
     public static void main(String[] args) {
 
         // the root dir for wsm dataset (the folder of unzipping *.zip)
-        String wsmRootDir = "/home/zmfan/Data/WSM";
+        String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
         // System.out.println(System.getenv("WSM_ROOT_DIR"));
 
         // construct an index for id -> doc
         ArrayList<Integer> docNumList = new ArrayList<>();
-        IndexIdToDoc indexIdToDoc = IndexConstruction.constructCourtInfoMapFromDisk(
+        IndexIdToDoc indexIdToDoc = BooleanIndexConstruction.constructCourtInfoMapFromDisk(
                 wsmRootDir, docNumList);
 
         // construct a Boolean index collection (for all fields)
         BooleanIndexCollection booleanIndexCollection = createIndexCollectionFromDocs(indexIdToDoc, docNumList);
 
-        // test a query
+        // store all indexes
         booleanIndexCollection.storeIndexToDisk(wsmRootDir);
 
     }
@@ -42,7 +45,7 @@ public class IndexConstruction {
         ArrayList<CourtInfo> courtInfos = new ArrayList<>();
         List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
 
-        for (int i = 0; i < docIdOffset.size()-2; i++){
+        for (int i = 0; i < docIdOffset.size(); i++){
             for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++){
 
                 CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
@@ -72,7 +75,7 @@ public class IndexConstruction {
      * @return the constructed index, from docId -> fileName
      */
     public static IndexIdToDoc constructCourtInfoMapFromDisk(String wsmRootDir,
-                                                             ArrayList<Integer> docNumList) {
+                                                             List<Integer> docNumList) {
         // read document list from three sub dirs
         String hshfySubDir = wsmRootDir + "/home/data/law/hshfy/info";
         String instrumentSubdir = wsmRootDir + "/home/data/law/hshfy_wenshu";

@@ -1,4 +1,4 @@
-package wsm.preprocess;
+package wsm.engine.booleanIndex;
 
 import wsm.models.CourtInfo;
 

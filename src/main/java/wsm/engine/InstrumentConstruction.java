@@ -1,6 +1,10 @@
-package wsm.preprocess;
+package wsm.engine;
 
 import wsm.models.CourtInfo;
+import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.engine.auxiliaryIndex.IndexIdToDoc;
+import wsm.models.CourtInfoLoader;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,19 +12,17 @@ import java.util.List;
 
 public class InstrumentConstruction {
     // the root dir for wsm dataset (the folder of unzipping *.zip)
-    private static final String wsmRootDir = "/home/zmfan/Data/WSM";
+    private static final String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
     // version1: test function for building the no word cut Index
     public static void main(String[] args) {
 
         // System.out.println(System.getenv("WSM_ROOT_DIR"));
 
         // construct an index for id -> doc
-        List<Integer> docIdOffsetList = Arrays.asList(0, 10000000, 20000000);
-        ArrayList<Integer> docIdOffset = new ArrayList<>();
-        docIdOffset.addAll(docIdOffsetList);
+        List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
         ArrayList<Integer> docNumList = new ArrayList<>();
         IndexIdToDoc indexIdToDoc = InstrumentConstruction.constructInstrumentMapFromDisk(
-                wsmRootDir, docIdOffset, docNumList);
+                wsmRootDir, docNumList);
 
         // update the index from all CourtInfos
         // maximum update entry number
@@ -39,12 +41,10 @@ public class InstrumentConstruction {
 
     public static List<String> getInstrumentContentList(){
 
-        List<Integer> docIdOffsetList = Arrays.asList(0, 10000000, 20000000);
-        ArrayList<Integer> docIdOffset = new ArrayList<>();
-        docIdOffset.addAll(docIdOffsetList);
         ArrayList<Integer> docNumList = new ArrayList<>();
+        List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
         IndexIdToDoc indexIdToDoc = InstrumentConstruction.constructInstrumentMapFromDisk(
-                wsmRootDir, docIdOffset, docNumList);
+                wsmRootDir, docNumList);
 
         // update the index from all CourtInfos
         // maximum update entry number
@@ -58,15 +58,14 @@ public class InstrumentConstruction {
         return contentList;
     }
 
-
     public static IndexIdToDoc constructInstrumentMapFromDisk(String wsmRootDir,
-                                                             ArrayList<Integer> docIdOffset,
-                                                             ArrayList<Integer> docNumList) {
+                                                             List<Integer> docNumList) {
         // read document list from three sub dirs
         String instrumentSubdir = wsmRootDir + "/home/data/law/hshfy_wenshu";
 
         // the doc to file hash map
         IndexIdToDoc indexIdToDoc = new IndexIdToDoc();
+        List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
         // construct docId -> fileName index
         int instrumentDocNum = indexIdToDoc.updateMapFromDataset(instrumentSubdir, docIdOffset.get(1));
 

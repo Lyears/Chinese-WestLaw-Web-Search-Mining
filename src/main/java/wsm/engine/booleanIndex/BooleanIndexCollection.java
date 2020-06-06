@@ -1,28 +1,33 @@
-package wsm.preprocess;
+package wsm.engine.booleanIndex;
 
 import wsm.models.CourtInfo;
+import wsm.engine.auxiliaryIndex.IndexConsts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
 public class BooleanIndexCollection extends IndexAbstract{
 
-    private ArrayList<IndexAbstract> indexCollection;
+    private HashMap<String, IndexAbstract> indexCollection;
 
     public BooleanIndexCollection() {
 
+        indexCollection = new HashMap<>();
+
         // create all init Boolean Indexes
         for (String noSplitKey: IndexConsts.noSplitKeys){
-            indexCollection.add(new IndexNoWordSplit(noSplitKey));
+            indexCollection.put(noSplitKey, new IndexNoWordSplit(noSplitKey));
         }
         for (String normalSplitKey: IndexConsts.normalSplitKeys){
-            indexCollection.add(new IndexNormalSplit(normalSplitKey));
+            indexCollection.put(normalSplitKey, new IndexNormalSplit(normalSplitKey));
         }
         for (String localDateKey: IndexConsts.localDateKeys) {
-            indexCollection.add(new IndexLocalDate(localDateKey));
+            indexCollection.put(localDateKey, new IndexLocalDate(localDateKey));
         }
-        indexCollection.add(new IndexDuty());
+        indexCollection.put("duty", new IndexDuty());
+//        indexCollection.put("caseCode", new IndexCaseCode());
 
     }
 
@@ -36,8 +41,8 @@ public class BooleanIndexCollection extends IndexAbstract{
             System.out.println("Update Overall Boolean Index from CourtInfo fails.");
             return;
         }
-        for (IndexAbstract indexAbstract: this.indexCollection) {
-            indexAbstract.updateFromCourtInfo(docId, courtInfo);
+        for (String key: indexCollection.keySet()) {
+            indexCollection.get(key).updateFromCourtInfo(docId, courtInfo);
         }
     }
 
@@ -57,7 +62,7 @@ public class BooleanIndexCollection extends IndexAbstract{
      * @param fileRootPath the index file path
      */
     public void storeIndexToDisk(String fileRootPath){
-        for (IndexAbstract indexAbstract: this.indexCollection) {
+        for (IndexAbstract indexAbstract: indexCollection.values()) {
             indexAbstract.storeIndexToDisk(fileRootPath);
         }
     }
