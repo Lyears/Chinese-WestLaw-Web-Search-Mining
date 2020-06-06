@@ -27,8 +27,7 @@ public class BooleanIndexCollection extends IndexAbstract{
             indexCollection.put(localDateKey, new IndexLocalDate(localDateKey));
         }
         indexCollection.put("duty", new IndexDuty());
-//        indexCollection.put("caseCode", new IndexCaseCode());
-
+        indexCollection.put("caseCode", new IndexCaseCode());
     }
 
     /**

@@ -35,7 +35,7 @@ public class IndexNoWordSplit extends IndexAbstract implements Serializable {
         for (int i = 0; i < docId.size(); i++){
             // only get the field with field name equal to keyword
             String noSplitString = courtInfo.get(i).getFieldValueByFieldName(keyWord, courtInfo.get(i));
-            if (noSplitString == null){
+            if (noSplitString == null || noSplitString.isBlank()){
                 continue;
             }
             if (!inverseIndex.containsKey(noSplitString)){
@@ -48,7 +48,7 @@ public class IndexNoWordSplit extends IndexAbstract implements Serializable {
             }
             for (PeopleInfoZxgk peopleInfoZxgk : courtInfo.get(i).getPeopleInfo()){
                 noSplitString = peopleInfoZxgk.getFieldValueByFieldName(keyWord, peopleInfoZxgk);
-                if (noSplitString == null){
+                if (noSplitString == null || noSplitString.isBlank()){
                     continue;
                 }
                 if (!inverseIndex.containsKey(noSplitString)){

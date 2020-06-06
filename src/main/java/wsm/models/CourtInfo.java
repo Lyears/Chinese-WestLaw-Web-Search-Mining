@@ -67,7 +67,13 @@ public class CourtInfo {
         try {
             Field field = object.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);
-            return (String) field.get(object);
+            Object fetchedRaw = field.get(object);
+            if (fetchedRaw == null) {
+                return null;
+            } else {
+                return field.get(object).toString();
+            }
+
         } catch (Exception e) {
             return null;
         }

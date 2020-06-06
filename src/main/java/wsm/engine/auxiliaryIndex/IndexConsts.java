@@ -11,12 +11,14 @@ public class IndexConsts {
 
     // the keys that need no split
     public static final List<String> noSplitKeys =
-            Arrays.asList("id", "age", "sexy", "cardNum", "areaName", "iname");
+            Arrays.asList("id", "age", "sexy", "cardNum", "areaName",
+                    "courtLevel", "type", "courtPhone", "performance");
 
     // the keys that need normal split
     public static final List<String> normalSplitKeys =
-            Arrays.asList("courtName", "gistId", "gistUnit",
-                    "disruptTypeName", "businessEntity", "corporationtypename");
+            Arrays.asList("iname", "courtName", "gistId", "gistUnit", "applicant", "address", "money",
+                    "disruptTypeName", "businessEntity", "corporationtypename",
+                    "theme", "cause", "performedPart", "unperformPart");
 
     // the keys that need LocalDate split
     public static final List<String> localDateKeys =

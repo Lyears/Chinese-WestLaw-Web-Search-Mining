@@ -47,6 +47,7 @@ public class BooleanIndexConstruction {
 
         for (int i = 0; i < docIdOffset.size(); i++){
             for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++){
+//            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + 3000; docId++){
 
                 CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
                         indexIdToDoc.getDocFileNameFromID(docId), docId, docIdOffset);

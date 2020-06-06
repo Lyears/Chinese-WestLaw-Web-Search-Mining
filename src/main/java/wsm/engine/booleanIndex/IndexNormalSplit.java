@@ -36,11 +36,20 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
         for (int i = 0; i < docId.size(); i++){
             // only get the field with field name equal to keyword
             String stringToSplit = courtInfo.get(i).getFieldValueByFieldName(keyWord, courtInfo.get(i));
-            if (stringToSplit == null){
+            if (stringToSplit == null || stringToSplit.length() <= 1){
+                // ignore null keys or too short strings
                 continue;
+            } else if (stringToSplit.trim().length() <= 20 && stringToSplit.trim().length() >= 2){
+                // for too short items, also use the whole string as key
+                if (!inverseIndex.containsKey(stringToSplit)){
+                    inverseIndex.put(stringToSplit, new TreeSet<>());
+                }
+                inverseIndex.get(stringToSplit).add(docId.get(i));
             }
+            // split the query String and use splited words as index
             ArrayList<String> indexKeyList = QuerySplitHandler.indexSplitter(stringToSplit);
             for (String s : indexKeyList) {
+                if (s.length() <= 1) {continue;}
                 if (!inverseIndex.containsKey(s)) {
                     inverseIndex.put(s, new TreeSet<>());
                 }
@@ -52,13 +61,22 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
             }
             for (PeopleInfoZxgk peopleInfoZxgk : courtInfo.get(i).getPeopleInfo()){
                 stringToSplit = peopleInfoZxgk.getFieldValueByFieldName(keyWord, peopleInfoZxgk);
-                if (stringToSplit == null){
+                if (stringToSplit == null || stringToSplit.length() <= 1){
                     continue;
+                } else if (stringToSplit.trim().length() <= 20 && stringToSplit.trim().length() >= 2){
+                    if (!inverseIndex.containsKey(stringToSplit)){
+                        inverseIndex.put(stringToSplit, new TreeSet<>());
+                    }
+                    inverseIndex.get(stringToSplit).add(docId.get(i));
                 }
-                if (!inverseIndex.containsKey(stringToSplit)){
-                    inverseIndex.put(stringToSplit, new TreeSet<>());
+                ArrayList<String> indexKeyListHierarchy = QuerySplitHandler.indexSplitter(stringToSplit);
+                for (String s : indexKeyListHierarchy) {
+                    if (s.length() <= 1) {continue;}
+                    if (!inverseIndex.containsKey(s)) {
+                        inverseIndex.put(s, new TreeSet<>());
+                    }
+                    inverseIndex.get(s).add(docId.get(i));
                 }
-                inverseIndex.get(stringToSplit).add(docId.get(i));
             }
         }
     }

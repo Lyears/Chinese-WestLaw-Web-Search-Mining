@@ -1,25 +1,21 @@
 package wsm.engine.booleanIndex;
 
 import wsm.models.CourtInfo;
+import wsm.models.PeopleInfoZxgk;
 import wsm.utils.DiskIOHandler;
 import wsm.utils.QuerySplitHandler;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 
-public class IndexDuty extends IndexAbstract implements Serializable {
-    public static final long serialVersionUID = 362498820666666666L;
+public class IndexCaseCode extends IndexAbstract implements Serializable {
+    public static final long serialVersionUID = 362498820111111111L;
 
     // the posting list for a key (or a term), using TreeSet
     private HashMap<String, TreeSet<Integer>> inverseIndex;
-    // the key word for this Index, only the corresponding items will be processed in this index
-    private final String[] keyWords = {"duty"};
 
-    public IndexDuty() {
+    public IndexCaseCode() {
         this.inverseIndex = new HashMap<>();
     }
 
@@ -27,32 +23,29 @@ public class IndexDuty extends IndexAbstract implements Serializable {
     public void updateFromCourtInfo(List<Integer> docId, List<CourtInfo> courtInfo) {
 
         if (docId == null || courtInfo == null || docId.size() != courtInfo.size()) {
-            System.out.println("Update Duty Index from CourtInfo fails.");
+            System.out.println("Update CaseCode Index from CourtInfo fails.");
             return;
         }
 
         // update index for every courtInfo
-        for (int i = 0; i < docId.size(); i++){
-
-            // only get the field with field name in keyWords list
-            for (String field: this.keyWords){
-
-                // split for other fields
-                String fieldValue = courtInfo.get(i).getFieldValueByFieldName(field, courtInfo.get(i));
-                if (fieldValue == null || fieldValue.isBlank()){ continue; }
-                fieldValue = fieldValue.replace('\u00A0', ' ');
-                ArrayList<String> indexKeyList = QuerySplitHandler.indexSplitter(fieldValue);
+        List<String> caseCodeKeyList = Collections.singletonList("caseCode");
+        for (String key: caseCodeKeyList){
+            for (int i = 0; i < docId.size(); i++){
+                // only get the field with field name equal to keyword
+                String stringToSplit = courtInfo.get(i).getFieldValueByFieldName(key, courtInfo.get(i));
+                if (stringToSplit == null){
+                    continue;
+                }
+                ArrayList<String> indexKeyList = QuerySplitHandler.caseCodeSplitter(stringToSplit);
                 for (String s : indexKeyList) {
-                    if (s.length() <= 1) {continue;}
                     if (!inverseIndex.containsKey(s)) {
                         inverseIndex.put(s, new TreeSet<>());
                     }
                     inverseIndex.get(s).add(docId.get(i));
                 }
-
             }
-
         }
+
     }
 
     @Override
@@ -65,7 +58,7 @@ public class IndexDuty extends IndexAbstract implements Serializable {
 
     @Override
     public void storeIndexToDisk(String fileRootPath){
-        String fileName = fileRootPath + "/boolean_index/special_split/duty";
+        String fileName = fileRootPath + "/boolean_index/special_split/caseCode";
         DiskIOHandler.writeObjectToFile(this, fileName);
     }
 
@@ -74,8 +67,8 @@ public class IndexDuty extends IndexAbstract implements Serializable {
      * @param fileRootPath the index file path
      * @return the recovered Index object
      */
-    public static IndexDuty recoverIndexFromDisk(String fileRootPath){
-        String fileName = fileRootPath + "/boolean_index/special_split/duty";
-        return (IndexDuty) DiskIOHandler.readObjectFromFile(fileName);
+    public static IndexCaseCode recoverIndexFromDisk(String fileRootPath){
+        String fileName = fileRootPath + "/boolean_index/special_split/caseCode";
+        return (IndexCaseCode) DiskIOHandler.readObjectFromFile(fileName);
     }
 }
