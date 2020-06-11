@@ -12,7 +12,7 @@ import java.util.List;
 
 public class InstrumentConstruction {
     // the root dir for wsm dataset (the folder of unzipping *.zip)
-    private static final String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
+    private static final String wsmRootDir = "/home/zmfan/Data/WSM";
     // version1: test function for building the no word cut Index
     public static void main(String[] args) {
 
