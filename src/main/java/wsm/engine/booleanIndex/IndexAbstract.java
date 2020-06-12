@@ -23,7 +23,6 @@ public abstract class IndexAbstract {
      */
     public abstract Set<Integer> queryFromRequestString(String queryString);
 
-
     /**
      * store the index into an index file
      * @param fileRootPath the index file path

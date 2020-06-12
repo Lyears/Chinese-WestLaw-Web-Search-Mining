@@ -2,6 +2,7 @@ package wsm.engine.booleanIndex;
 
 import wsm.models.CourtInfo;
 import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.utils.DiskIOHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,10 @@ public class BooleanIndexCollection extends IndexAbstract{
         }
         indexCollection.put("duty", new IndexDuty());
         indexCollection.put("caseCode", new IndexCaseCode());
+    }
+
+    public IndexAbstract getIndexFromKey(String key) {
+        return indexCollection.get(key);
     }
 
     /**
@@ -64,6 +69,24 @@ public class BooleanIndexCollection extends IndexAbstract{
         for (IndexAbstract indexAbstract: indexCollection.values()) {
             indexAbstract.storeIndexToDisk(fileRootPath);
         }
+    }
+
+    public static BooleanIndexCollection recoverIndexFromDisk(String fileRootPath){
+        BooleanIndexCollection booleanIndexCollection = new BooleanIndexCollection();
+
+        // recover all generated Boolean Indexes
+        for (String noSplitKey: IndexConsts.noSplitKeys){
+            booleanIndexCollection.getIndexFromKey(noSplitKey).storeIndexToDisk(fileRootPath);
+        }
+        for (String normalSplitKey: IndexConsts.normalSplitKeys){
+            booleanIndexCollection.getIndexFromKey(normalSplitKey).storeIndexToDisk(fileRootPath);
+        }
+        for (String localDateKey: IndexConsts.localDateKeys) {
+            booleanIndexCollection.getIndexFromKey(localDateKey).storeIndexToDisk(fileRootPath);
+        }
+        booleanIndexCollection.getIndexFromKey("duty").storeIndexToDisk(fileRootPath);
+        booleanIndexCollection.getIndexFromKey("caseCode").storeIndexToDisk(fileRootPath);
+        return booleanIndexCollection;
     }
 
 }

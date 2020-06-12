@@ -3,13 +3,11 @@ package wsm.engine.booleanIndex;
 import wsm.models.CourtInfo;
 import wsm.models.PeopleInfoZxgk;
 import wsm.utils.DiskIOHandler;
+import wsm.utils.PostingListOperation;
 import wsm.utils.QuerySplitHandler;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class IndexNormalSplit extends IndexAbstract implements Serializable {
     public static final long serialVersionUID = 362498820888888888L;
@@ -83,10 +81,28 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
 
     @Override
     public TreeSet<Integer> queryFromRequestString(String queryString) {
-        if (inverseIndex.containsKey(queryString)) {
-            return inverseIndex.get(queryString);
+
+        // query spitted terms, AND all results
+        List<String> splitedKeys = QuerySplitHandler.indexSplitter(queryString);
+        TreeSet<Integer> splitQueryRes = new TreeSet<>();
+        for (String splitedKey : splitedKeys) {
+            if (inverseIndex.containsKey(splitedKey)) {
+                PostingListOperation.opANDPostingLists(splitQueryRes, inverseIndex.get(splitedKey));
+            } else {
+                splitQueryRes.clear();
+                break;
+            }
         }
-        return null;
+
+        // query whole string
+        TreeSet<Integer> wholeQueryRes = new TreeSet<>();
+        if (queryString.trim().length() <= 20 && queryString.trim().length() >= 2) {
+            PostingListOperation.opORPostingLists(wholeQueryRes, inverseIndex.get(queryString));
+        }
+
+        PostingListOperation.opORPostingLists(splitQueryRes, wholeQueryRes);
+
+        return splitQueryRes;
     }
 
     @Override
