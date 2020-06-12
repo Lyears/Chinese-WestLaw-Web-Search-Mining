@@ -20,7 +20,7 @@ $('#sortType').children("a").click(function () {
 
 $('#queryButton').click(function () {
     let queryStr = $('#inputStr').val()
-    window.location.href = "/list?" + "searchType=query&" + "searchValue=" + queryStr + "sortType=0"
+    window.location.href = "/instruments?" + "searchType=query&" + "searchValue=" + queryStr + "sortType=0"
 })
 
 $('#query').click(function () {

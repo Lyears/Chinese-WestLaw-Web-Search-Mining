@@ -13,6 +13,7 @@ public class CourtInfoLoader {
 
     /**
      * load a CountInfoHshfy object from doc file
+     *
      * @param docPath the document path
      * @return a CourtInfoHshfy object
      */
@@ -29,6 +30,7 @@ public class CourtInfoLoader {
 
     /**
      * load a CountInfoZxgk object from doc file
+     *
      * @param docPath the document path
      * @return a CourtInfoZxgk object
      */
@@ -46,6 +48,7 @@ public class CourtInfoLoader {
 
     /**
      * load a CountInstrument object from doc file
+     *
      * @param docPath the document path
      * @return a CourtInstrument object
      */
@@ -63,11 +66,12 @@ public class CourtInfoLoader {
 
     /**
      * Transform CourtInfo of three formats into the same format
+     *
      * @param courtInfoFormatted all cases of CourtInfo Object,
      *                           including CourtInfoHshfy, CourtInfoZxgk, CourtInstrumentHshfy
      * @return A universal CourtInfo Object, for all kinds of CourtInfo data
      */
-    public static CourtInfo createCourtInfoFromAllFormats(Object courtInfoFormatted){
+    public static CourtInfo createCourtInfoFromAllFormats(Object courtInfoFormatted) {
 
         // judge the format of the courtInfo object
         if (courtInfoFormatted instanceof CourtInfoZxgk) {
@@ -84,7 +88,7 @@ public class CourtInfoLoader {
             courtInfo.setCaseCode(changeNullToEmpty(courtInfoZxgk.getCaseCode()));
             if (courtInfoZxgk.getSexy() != null) {
                 List<String> sexyList = Arrays.asList("男", "男性", "女性", "女");
-                if (sexyList.contains(courtInfoZxgk.getSexy())){
+                if (sexyList.contains(courtInfoZxgk.getSexy())) {
                     courtInfo.setSexy(changeNullToEmpty(courtInfoZxgk.getSexy()).charAt(0) + "");
                 } else {
                     courtInfo.setSexy(changeNullToEmpty(courtInfoZxgk.getSexy()));
@@ -107,8 +111,8 @@ public class CourtInfoLoader {
             courtInfo.setPeopleInfo(courtInfoZxgk.getPeopleInfo());
             courtInfo.setUnperformPart(changeNullToEmpty(courtInfoZxgk.getUnperformPart()).trim());
 
-            if (courtInfo.getPeopleInfo() != null){
-                for (PeopleInfoZxgk peopleInfoZxgk: courtInfo.getPeopleInfo()){
+            if (courtInfo.getPeopleInfo() != null) {
+                for (PeopleInfoZxgk peopleInfoZxgk : courtInfo.getPeopleInfo()) {
                     peopleInfoZxgk.setCardNum(changeNullToEmpty(peopleInfoZxgk.getCardNum()));
                     peopleInfoZxgk.setIname(changeNullToEmpty(peopleInfoZxgk.getIname()));
                     peopleInfoZxgk.setCorporationtypename(
@@ -131,11 +135,11 @@ public class CourtInfoLoader {
             courtInfo.setApplicant(changeNullToEmpty(courtInfoHshfy.getApplicant()));
             String courtAndPhone = changeNullToEmpty(courtInfoHshfy.getCourtAndPhone());
             // use regex to match the courtName and Phone number
-            if (!courtAndPhone.isBlank()){
+            if (!courtAndPhone.isBlank()) {
                 String pattern = "([\\d,-]+)$";
                 Pattern regex = Pattern.compile(pattern);
                 Matcher match = regex.matcher(courtAndPhone);
-                if (match.find()){
+                if (match.find()) {
                     courtInfo.setCourtName(courtAndPhone.substring(0, match.start()).trim());
                     courtInfo.setCourtPhone(match.group(0).trim());
                 }
@@ -154,7 +158,7 @@ public class CourtInfoLoader {
             CourtInfo courtInfo = new CourtInfo();
 
             // fill in all possessed fields
-            courtInfo.setInstrumentId(changeNullToEmpty(courtInstrumentHshfy.getInstrumentId()));
+            courtInfo.setInstrumentId(changeNullToEmpty(courtInstrumentHshfy.getInstrumentId()).replace('/', '_'));
             courtInfo.setCaseCode(changeNullToEmpty(courtInstrumentHshfy.getCaseCode()));
             courtInfo.setTheme(changeNullToEmpty(courtInstrumentHshfy.getTheme()));
             courtInfo.setType(changeNullToEmpty(courtInstrumentHshfy.getType()));
@@ -173,33 +177,34 @@ public class CourtInfoLoader {
 
     /**
      * a function for directly get CourtInfo from file path
-     * @param docFile the file path
-     * @param docId the docId, used to judge id
+     *
+     * @param docFile         the file path
+     * @param docId           the docId, used to judge id
      * @param docIdOffsetList the doc id offset list, e.g. [0,10000000,20000000]
      * @return the loaded CourtInfo object
      */
     public static CourtInfo loadCourtInfoFromDoc(String docFile, int docId, List<Integer> docIdOffsetList) {
 
-       if (docIdOffsetList == null || docIdOffsetList.size() != 3) {
-           System.out.println("Doc Id offset fails, should have 3 elements.");
-       }
+        if (docIdOffsetList == null || docIdOffsetList.size() != 3) {
+            System.out.println("Doc Id offset fails, should have 3 elements.");
+        }
 
-       if (docId < docIdOffsetList.get(1) && docId >= docIdOffsetList.get(0)) {
-           return CourtInfoLoader.createCourtInfoFromAllFormats(
-                   CourtInfoLoader.loadCourtInfoHshfyFromDoc(docFile));
-       } else if (docId < docIdOffsetList.get(2)) {
-           return CourtInfoLoader.createCourtInfoFromAllFormats(
-                   CourtInfoLoader.loadCourtInstrumentFromDoc(docFile));
-       } else if (docId >= docIdOffsetList.get(2)){
+        if (docId < docIdOffsetList.get(1) && docId >= docIdOffsetList.get(0)) {
+            return CourtInfoLoader.createCourtInfoFromAllFormats(
+                    CourtInfoLoader.loadCourtInfoHshfyFromDoc(docFile));
+        } else if (docId < docIdOffsetList.get(2)) {
+            return CourtInfoLoader.createCourtInfoFromAllFormats(
+                    CourtInfoLoader.loadCourtInstrumentFromDoc(docFile));
+        } else if (docId >= docIdOffsetList.get(2)) {
             return CourtInfoLoader.createCourtInfoFromAllFormats(
                     CourtInfoLoader.loadCourtInfoZxgkFromDoc(docFile));
-       }
-       System.out.printf("Cannot load a valid CourtInfo object from disk, docId %d", docId);
-       return null;
+        }
+        System.out.printf("Cannot load a valid CourtInfo object from disk, docId %d", docId);
+        return null;
     }
 
-    private static String changeNullToEmpty(String str){
-        if (str == null){
+    private static String changeNullToEmpty(String str) {
+        if (str == null) {
             return "";
         } else {
             return str.replace('\u00A0', ' ').trim();
