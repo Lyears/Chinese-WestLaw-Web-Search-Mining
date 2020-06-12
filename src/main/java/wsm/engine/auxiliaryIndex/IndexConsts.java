@@ -1,7 +1,11 @@
 package wsm.engine.auxiliaryIndex;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 public class IndexConsts {
 
@@ -23,5 +27,42 @@ public class IndexConsts {
     // the keys that need LocalDate split
     public static final List<String> localDateKeys =
             Arrays.asList("regDate", "publishDate", "caseDue");
+
+    // the query key replacement map
+    public static final HashMap<String, String> replaceMap = new HashMap<String, String>(){{
+        put("\u00A0", "");
+        put(" ", "");
+        put("{", "<");
+        put("}", ">");
+        put("", "id");
+        put("", "age");
+        put("", "sexy");
+        put("", "cardNum");
+        put("", "areaName");
+        put("", "courtLevel");
+        put("", "type");
+        put("", "courtPhone");
+        put("", "performance");
+        put("", "iname");
+        put("", "courtName");
+        put("", "gistId");
+        put("", "gistUnit");
+        put("", "applicant");
+        put("", "money");
+        put("", "address");
+        put("", "disruptTypeName");
+        put("", "businessEntity");
+        put("", "corporationtypename");
+        put("", "theme");
+        put("", "cause");
+        put("", "performedPart");
+        put("", "unperformPart");
+        put("", "regDate");
+        put("", "publishDate");
+        put("", "caseDue");
+        put("", "caseCode");
+        put("", "duty");
+    }};
+
 
 }

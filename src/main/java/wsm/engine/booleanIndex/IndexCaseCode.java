@@ -3,6 +3,7 @@ package wsm.engine.booleanIndex;
 import wsm.models.CourtInfo;
 import wsm.models.PeopleInfoZxgk;
 import wsm.utils.DiskIOHandler;
+import wsm.utils.PostingListOperation;
 import wsm.utils.QuerySplitHandler;
 
 import java.io.Serializable;
@@ -50,10 +51,23 @@ public class IndexCaseCode extends IndexAbstract implements Serializable {
 
     @Override
     public TreeSet<Integer> queryFromRequestString(String queryString) {
-        if (inverseIndex.containsKey(queryString)) {
-            return inverseIndex.get(queryString);
+
+        List<String> spittedStringList = QuerySplitHandler.caseCodeSplitter(queryString);
+        TreeSet<Integer> feedback = new TreeSet<>();
+
+        for (String key: spittedStringList) {
+            if (feedback.isEmpty()) {
+                PostingListOperation.opORPostingLists(feedback, inverseIndex.get(key));
+            } else {
+                PostingListOperation.opANDPostingLists(feedback, inverseIndex.get(key));
+            }
+            if (feedback.isEmpty()){
+                break;
+            }
         }
-        return null;
+
+        PostingListOperation.opORPostingLists(feedback, inverseIndex.get(queryString));
+        return feedback;
     }
 
     @Override

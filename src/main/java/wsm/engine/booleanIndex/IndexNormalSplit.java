@@ -84,25 +84,24 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
 
         // query spitted terms, AND all results
         List<String> splitedKeys = QuerySplitHandler.indexSplitter(queryString);
-        TreeSet<Integer> splitQueryRes = new TreeSet<>();
-        for (String splitedKey : splitedKeys) {
-            if (inverseIndex.containsKey(splitedKey)) {
-                PostingListOperation.opANDPostingLists(splitQueryRes, inverseIndex.get(splitedKey));
+        TreeSet<Integer> feedback = new TreeSet<>();
+        for (String key : splitedKeys) {
+            if (feedback.isEmpty()) {
+                PostingListOperation.opORPostingLists(feedback, inverseIndex.get(key));
             } else {
-                splitQueryRes.clear();
+                PostingListOperation.opANDPostingLists(feedback, inverseIndex.get(key));
+            }
+            if (feedback.isEmpty()) {
                 break;
             }
         }
 
         // query whole string
-        TreeSet<Integer> wholeQueryRes = new TreeSet<>();
         if (queryString.trim().length() <= 20 && queryString.trim().length() >= 2) {
-            PostingListOperation.opORPostingLists(wholeQueryRes, inverseIndex.get(queryString));
+            PostingListOperation.opORPostingLists(feedback, inverseIndex.get(queryString));
         }
 
-        PostingListOperation.opORPostingLists(splitQueryRes, wholeQueryRes);
-
-        return splitQueryRes;
+        return feedback;
     }
 
     @Override

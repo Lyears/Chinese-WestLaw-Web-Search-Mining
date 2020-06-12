@@ -2,6 +2,7 @@ package wsm.engine.booleanIndex;
 
 import wsm.models.CourtInfo;
 import wsm.utils.DiskIOHandler;
+import wsm.utils.PostingListOperation;
 import wsm.utils.QuerySplitHandler;
 
 import java.io.Serializable;
@@ -57,10 +58,21 @@ public class IndexDuty extends IndexAbstract implements Serializable {
 
     @Override
     public TreeSet<Integer> queryFromRequestString(String queryString) {
-        if (inverseIndex.containsKey(queryString)) {
-            return inverseIndex.get(queryString);
+
+        TreeSet<Integer> feedback = new TreeSet<>();
+        List<String> splittedKey = QuerySplitHandler.indexSplitter(queryString);
+        for (String key: splittedKey) {
+            if (feedback.isEmpty()) {
+                PostingListOperation.opORPostingLists(feedback, inverseIndex.get(key));
+            } else {
+                PostingListOperation.opANDPostingLists(feedback, inverseIndex.get(key));
+            }
+            if (feedback.isEmpty()){
+                break;
+            }
         }
-        return null;
+        PostingListOperation.opORPostingLists(feedback, inverseIndex.get(queryString));
+        return feedback;
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.ansj.splitWord.analysis.IndexAnalysis;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -125,12 +126,15 @@ public class QuerySplitHandler {
         ArrayList<String> dateList1 = dateSplitter(date);
         System.out.println(dateList1);
 
-        String caseCodeQuery1 = " （2020）沪72执恢3号";
-        String caseCodeQuery2 = "（）沪72执恢  第782178-号";
-        String caseCodeQuery3 = "2013年昌执字第00603号";
-        String caseCodeQuery4 = "？？2017？？？？0422？177？？";
-        ArrayList<String> caseCodeList = caseCodeSplitter(caseCodeQuery4);
-        System.out.println(caseCodeList);
+        List<String> caseCodes = Arrays.asList(" （2020）沪72执恢3号",
+                "（）沪72执恢  第782178-号",
+                "2013年昌执字第00603号",
+                "？？2017？？？？0422？177？？");
+        for (String caseCode: caseCodes) {
+            ArrayList<String> caseCodeList = caseCodeSplitter(caseCode);
+            System.out.println(caseCodeList);
+        }
+
     }
 
 }

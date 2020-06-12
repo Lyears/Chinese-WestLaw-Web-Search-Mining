@@ -123,6 +123,8 @@ public class BooleanQueryParser {
      */
     public static List<String> splitValueAndKey(String queryInstance) {
 
+        // first filter the query instance
+
         List<String> feedback = new ArrayList<>();
 
         // use regex to match the value and key
@@ -162,7 +164,7 @@ public class BooleanQueryParser {
         List<String> splitResult1 = BooleanQueryParser.splitValueAndKey(testSplit1);
         System.out.println(splitResult1);
         // KV split test 2
-        String testSplit2 = "qk";
+        String testSplit2 = "qk  ";
         List<String> splitResult2 = BooleanQueryParser.splitValueAndKey(testSplit2);
         System.out.println(splitResult2);
         // KV split test 3
