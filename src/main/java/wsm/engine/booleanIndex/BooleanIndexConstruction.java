@@ -16,8 +16,8 @@ public class BooleanIndexConstruction {
     public static void main(String[] args) {
 
         // the root dir for wsm dataset (the folder of unzipping *.zip)
-        String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
-        // System.out.println(System.getenv("WSM_ROOT_DIR"));
+//        String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR");
 
         // construct an index for id -> doc
         ArrayList<Integer> docNumList = new ArrayList<>();
@@ -45,19 +45,19 @@ public class BooleanIndexConstruction {
         ArrayList<CourtInfo> courtInfos = new ArrayList<>();
         List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
 
-        for (int i = 0; i < docIdOffset.size(); i++){
-            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++){
+        for (int i = 0; i < docIdOffset.size(); i++) {
+            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++) {
 //            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + 3000; docId++){
 
                 CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
                         indexIdToDoc.getDocFileNameFromID(docId), docId, docIdOffset);
-                if (courtInfo != null){
+                if (courtInfo != null) {
                     courtInfos.add(courtInfo);
                     docIdList.add(docId);
                 }
 
                 if (docIdList.size() == maximumEntryUpdateNumber ||
-                        docId == docIdOffset.get(i) + docNumList.get(i) - 1){
+                        docId == docIdOffset.get(i) + docNumList.get(i) - 1) {
                     System.out.printf("Update index, current docId %d\n", docId);
                     feedback.updateFromCourtInfo(docIdList, courtInfos);
                     docIdList.clear();
@@ -71,6 +71,7 @@ public class BooleanIndexConstruction {
 
     /**
      * construct a docId -> fileName index from wsmRootDir, and also create a list for number of docs
+     *
      * @param wsmRootDir the wsm root dir
      * @param docNumList also an implicit return parameter, the number of documents for all three dataset
      * @return the constructed index, from docId -> fileName

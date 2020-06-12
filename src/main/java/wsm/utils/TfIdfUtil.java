@@ -8,14 +8,18 @@ import org.ansj.recognition.impl.BookRecognition;
 import org.ansj.recognition.impl.StopRecognition;
 import org.ansj.splitWord.analysis.NlpAnalysis;
 import wsm.engine.InstrumentConstruction;
+import wsm.engine.booleanIndex.IndexCaseCode;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * @author zmfan
  */
-public class TfIdfUtil {
+public class TfIdfUtil implements Serializable {
+
+    public static final long serialVersionUID = 362498820111132311L;
     private final List<String> documents;
     private List<List<String>> documentWords;
     private List<Map<String, Integer>> documentTfList;
@@ -178,7 +182,8 @@ public class TfIdfUtil {
     }
 
     /**
-     *  calculate cosine similarity for two vectors
+     * calculate cosine similarity for two vectors
+     *
      * @param v1 vector1
      * @param v2 vector2
      * @return cosine similarity
@@ -197,6 +202,7 @@ public class TfIdfUtil {
 
     /**
      * get top k relevant documents indices
+     *
      * @param queryStr query statement
      * @return indices list for top k
      */
@@ -219,13 +225,29 @@ public class TfIdfUtil {
         return queryResultMap.values().stream().limit(k).collect(Collectors.toList());
     }
 
-    public static void main(String[] args) {
+    public void storeIndexToDisk(String fileRootPath) {
+        String fileName = fileRootPath + "/tfIdf";
+        DiskIOHandler.writeObjectToFile(this, fileName);
+    }
+
+    public static TfIdfUtil recoverFromDisk(String fileRootPath) {
+        String fileName = fileRootPath + "/tfIdf";
+        return (TfIdfUtil) DiskIOHandler.readObjectFromFile(fileName);
+    }
+
+    /**
+     * store the object to disk
+     *
+     * @param fileRootPath root path
+     */
+    public static void initialize(String fileRootPath) {
         TfIdfUtil tfIdfUtil = new TfIdfUtil(InstrumentConstruction.getInstrumentContentList());
         tfIdfUtil.estimate();
+        tfIdfUtil.storeIndexToDisk(fileRootPath);
+    }
 
-        List<Integer> res = tfIdfUtil.getRelevantTopKIndices("该合同系双方真实意思表示，被告没有利用强势地位强行与原告签订合同", 30);
-        System.out.println(res);
-
+    public static void main(String[] args) {
+        initialize(args[0]);
     }
 }
 

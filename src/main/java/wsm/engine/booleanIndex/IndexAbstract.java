@@ -3,6 +3,7 @@ package wsm.engine.booleanIndex;
 import wsm.models.CourtInfo;
 
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 public abstract class IndexAbstract {
@@ -20,7 +21,7 @@ public abstract class IndexAbstract {
      * @param queryString the String for querying
      * @return the posting list
      */
-    public abstract TreeSet<Integer> queryFromRequestString(String queryString);
+    public abstract Set<Integer> queryFromRequestString(String queryString);
 
 
     /**
