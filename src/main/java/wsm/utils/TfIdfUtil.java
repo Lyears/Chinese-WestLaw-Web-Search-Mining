@@ -247,7 +247,8 @@ public class TfIdfUtil implements Serializable {
     }
 
     public static void main(String[] args) {
-        initialize(args[0]);
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        initialize(wsmRootDir);
     }
 }
 

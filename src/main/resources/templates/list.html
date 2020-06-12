@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>List-Chinese-WestLaw</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
     <style type="text/css">
-        html{
+        html {
             position: relative;
             min-height: 100%;
         }
-        body{
+
+        body {
             margin-bottom: 60px;
         }
-        .footer{
+
+        .footer {
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -37,113 +39,27 @@
     <div class="row " style="margin: 1%">
         <div class="col-12">
             <div class="alert alert-dark" role="alert">
-                A simple dark alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+                A simple dark alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you
+                like.
             </div>
         </div>
-        <div class="col-12">
+        <div th:each="instrument :${instruments}" class="col-12">
             <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
+                <a href="#" class="alert-link" th:text="${instrument.getTheme()}">an example link</a>
             </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert with <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="alert alert-dark" role="alert">
-                A simple dark alert—check it out!
-            </div>
-        </div>
 
+        </div>
     </div>
+
 </div>
+
+
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
         <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-        </a>
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
         <li class="page-item"><a class="page-link" href="#">1</a></li>
         <li class="page-item"><a class="page-link" href="#">2</a></li>
         <li class="page-item"><a class="page-link" href="#">3</a></li>

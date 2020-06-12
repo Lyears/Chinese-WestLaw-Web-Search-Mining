@@ -51,8 +51,6 @@ test {
 task init_tfidf(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
     main = 'wsm.utils.TfIdfUtil'
-    String wsmRootDir = System.getenv("WSM_ROOT_DIR")
-    args wsmRootDir
 }
 
 task init_boolean_index(type: JavaExec){
