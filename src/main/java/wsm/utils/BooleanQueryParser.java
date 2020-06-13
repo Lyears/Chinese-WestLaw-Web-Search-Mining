@@ -1,8 +1,9 @@
 package wsm.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.exception.QueryFormatException;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +18,7 @@ public class BooleanQueryParser {
 
         if (queryString == null || queryString.length() == 0) {
             System.out.println("Cannot parse null or empty string");
-            return null;
+            throw new QueryFormatException(0, "Cannot parse null or empty string");
         }
 
         // the stack for operations
@@ -45,7 +46,7 @@ public class BooleanQueryParser {
                     }
                     if (stack.empty()){
                         System.out.println("Query String Error, does not match ( and )");
-                        return null;
+                        throw new QueryFormatException(1, "Query String Error, does not match ( and )");
                     }
                 }
                 index += 1;
@@ -118,25 +119,28 @@ public class BooleanQueryParser {
 
     /**
      * split a query instance into key and value, e.g. qk<iname> --> {qk,iname}
-     * @param queryInstance a query instance, format "value<key>"
+     * @param queryString a query instance, format "value<key>"
      * @return A list of key and value, [0] for value, [1] for key (optional)
      */
-    public static List<String> splitValueAndKey(String queryInstance) {
+    public static List<String> splitValueAndKey(String queryString) {
 
         // first filter the query instance
+        for (Map.Entry<String, String> entry : IndexConsts.replaceMap.entrySet()) {
+            queryString = queryString.replace(entry.getKey(), entry.getValue());
+        }
 
         List<String> feedback = new ArrayList<>();
 
         // use regex to match the value and key
-        if (!queryInstance.isBlank()){
+        if (!queryString.isBlank()){
             String pattern = "<.*>$";
             Pattern regex = Pattern.compile(pattern);
-            Matcher match = regex.matcher(queryInstance);
+            Matcher match = regex.matcher(queryString);
             if (match.find()){
-                feedback.add(queryInstance.substring(0, match.start()).trim());
-                feedback.add(queryInstance.substring(match.start() + 1, match.end() - 1));
+                feedback.add(queryString.substring(0, match.start()).trim());
+                feedback.add(queryString.substring(match.start() + 1, match.end() - 1));
             } else {
-                feedback.add(queryInstance);
+                feedback.add(queryString);
                 feedback.add("all");
             }
             return feedback;
@@ -160,7 +164,7 @@ public class BooleanQueryParser {
         System.out.println(parseResult3);
 
         // KV split test 1
-        String testSplit1 = "qk<iname>";
+        String testSplit1 = "qk{性别}";
         List<String> splitResult1 = BooleanQueryParser.splitValueAndKey(testSplit1);
         System.out.println(splitResult1);
         // KV split test 2

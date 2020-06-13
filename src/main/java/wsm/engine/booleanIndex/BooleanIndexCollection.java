@@ -1,13 +1,12 @@
 package wsm.engine.booleanIndex;
 
+import wsm.exception.QueryFormatException;
 import wsm.models.CourtInfo;
 import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.utils.BooleanQueryParser;
 import wsm.utils.DiskIOHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class BooleanIndexCollection extends IndexAbstract{
 
@@ -56,8 +55,18 @@ public class BooleanIndexCollection extends IndexAbstract{
      * @param queryString the String for querying
      * @return the posting list
      */
-    public TreeSet<Integer> queryFromRequestString(String queryString){
-        return null;
+    public TreeSet<Integer> queryFromRequestString(String queryString) {
+
+        List<String> rearEqn = BooleanQueryParser.convertMidEqnToRearEqn(queryString);
+        Stack<String> queryStack = new Stack<>();
+        for (String str : rearEqn) {
+            if (str.length() == 0) {
+                throw new QueryFormatException(2, "query instance format error");
+            } else if (str.length() == 1){
+                char op = str.charAt(0);
+            }
+        }
+        return  null;
     }
 
 
