@@ -145,7 +145,7 @@ public class BooleanQueryParser {
             }
             return feedback;
         }
-        return null;
+        throw new QueryFormatException(3, "Split Key value from OPinstance fails");
     }
 
     public static void main(String[] arg){

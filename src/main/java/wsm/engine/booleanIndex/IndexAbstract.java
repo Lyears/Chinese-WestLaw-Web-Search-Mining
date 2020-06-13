@@ -21,7 +21,7 @@ public abstract class IndexAbstract {
      * @param queryString the String for querying
      * @return the posting list
      */
-    public abstract Set<Integer> queryFromRequestString(String queryString);
+    public abstract TreeSet<Integer> queryFromRequestString(String queryString);
 
     /**
      * store the index into an index file

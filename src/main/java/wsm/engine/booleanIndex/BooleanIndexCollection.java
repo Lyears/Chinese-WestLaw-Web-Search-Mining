@@ -5,6 +5,7 @@ import wsm.models.CourtInfo;
 import wsm.engine.auxiliaryIndex.IndexConsts;
 import wsm.utils.BooleanQueryParser;
 import wsm.utils.DiskIOHandler;
+import wsm.utils.PostingListOperation;
 
 import java.util.*;
 
@@ -59,14 +60,84 @@ public class BooleanIndexCollection extends IndexAbstract{
 
         List<String> rearEqn = BooleanQueryParser.convertMidEqnToRearEqn(queryString);
         Stack<String> queryStack = new Stack<>();
+        HashMap<String, TreeSet<Integer>> tmpMap = new HashMap<String, TreeSet<Integer>>();
+        TreeSet<Integer> feedback = null;
         for (String str : rearEqn) {
             if (str.length() == 0) {
                 throw new QueryFormatException(2, "query instance format error");
-            } else if (str.length() == 1){
-                char op = str.charAt(0);
+            } else if (str.equals("|") || str.equals("&") || str.equals("^") || str.equals("\\") ) {
+                // fetch two op vals
+                TreeSet<Integer> feedbackVar2, feedbackVar1;
+
+                // first op2
+                if (queryStack.empty()){
+                    throw new QueryFormatException(2, "query instance format error");
+                }
+                String var2 = queryStack.pop();
+                if (tmpMap.containsKey(var2)) {
+                    feedbackVar2 = (TreeSet<Integer>) tmpMap.get(var2).clone();
+                } else {
+                    List<String> var2KV = BooleanQueryParser.splitValueAndKey(var2);
+                    feedbackVar2 = queryWithKeyValue(var2KV.get(1), var2KV.get(0));
+                }
+
+                // then op1
+                if (queryStack.empty()){
+                    throw new QueryFormatException(2, "query instance format error");
+                }
+                String var1 = queryStack.pop();
+                if (tmpMap.containsKey(var1)) {
+                    feedbackVar1 = (TreeSet<Integer>) tmpMap.get(var1).clone();
+                } else {
+                    List<String> var1KV = BooleanQueryParser.splitValueAndKey(var1);
+                    feedbackVar1 = queryWithKeyValue(var1KV.get(1), var1KV.get(0));
+                }
+                String newKey = "";
+                if (str.equals("|")) {
+                    PostingListOperation.opORPostingLists(feedbackVar1, feedbackVar2);
+                    newKey = "c||" + var1 + var2;
+                } else if (str.equals("&")) {
+                    PostingListOperation.opANDPostingLists(feedbackVar1, feedbackVar2);
+                    newKey = "c&&" + var1 + var2;
+                } else if (str.equals("^")) {
+                    PostingListOperation.opSYMDIFPostingLists(feedbackVar1, feedbackVar2);
+                    newKey = "c^^" + var1 + var2;
+                } else if (str.equals("\\")) {
+                    PostingListOperation.opSUBPostingLists(feedbackVar1, feedbackVar2);
+                    newKey = "c\\\\" + var1 + var2;
+                }
+                queryStack.push(newKey);
+                tmpMap.put(newKey, feedbackVar1);
+                feedback = feedbackVar1;
+            } else {
+                queryStack.push(str);
             }
         }
-        return  null;
+        if (feedback ==  null) {
+            throw new QueryFormatException(5, "Unknown failure for query string parsing");
+        }
+        return feedback;
+    }
+
+    /**
+     * query from a specific index
+     * @param key key indicates the index
+     * @param value value indicates the query string for a specific index key
+     * @return the doc id list
+     */
+    public TreeSet<Integer> queryWithKeyValue(String key, String value) {
+        if (key.equals("all")) {
+            TreeSet<Integer> feedback = new TreeSet<>();
+            for (Map.Entry<String, IndexAbstract> entry : indexCollection.entrySet()) {
+                PostingListOperation.opORPostingLists(feedback,
+                        entry.getValue().queryFromRequestString(value));
+            }
+            return feedback;
+        } else if (!indexCollection.containsKey(key)) {
+            throw new QueryFormatException(4, "Index Key does not exist in Database");
+        } else {
+            return indexCollection.get(key).queryFromRequestString(value);
+        }
     }
 
 
