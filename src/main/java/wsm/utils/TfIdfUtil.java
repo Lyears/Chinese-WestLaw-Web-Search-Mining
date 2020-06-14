@@ -8,7 +8,6 @@ import org.ansj.recognition.impl.BookRecognition;
 import org.ansj.recognition.impl.StopRecognition;
 import org.ansj.splitWord.analysis.NlpAnalysis;
 import wsm.engine.InstrumentConstruction;
-import wsm.engine.booleanIndex.IndexCaseCode;
 
 import java.io.Serializable;
 import java.util.*;
@@ -25,6 +24,7 @@ public class TfIdfUtil implements Serializable {
     private List<Map<String, Integer>> documentTfList;
     private Map<String, Double> idfMap;
     private List<Map<String, Double>> tfIdfMap;
+    private Recognition preFilter;
 
     public void setOnlyNoun(boolean onlyNoun) {
         this.onlyNoun = onlyNoun;
@@ -37,6 +37,7 @@ public class TfIdfUtil implements Serializable {
     }
 
     public void estimate() {
+        this.initPreFilter();
         this.splitAllDocsWords();
         this.calAllTf();
         this.calIdf();
@@ -54,10 +55,8 @@ public class TfIdfUtil implements Serializable {
 
     /**
      * define stop word ,regex and dictionary before split words
-     *
-     * @return the matching filter
-     */
-    private Recognition preFilter() {
+     **/
+    private void initPreFilter() {
         //add defined dictionary
         DicLibrary.insert(DicLibrary.DEFAULT, "二〇一九年", "n", DicLibrary.DEFAULT_FREQ);
         DicLibrary.insert(DicLibrary.DEFAULT, "二〇一八年", "n", DicLibrary.DEFAULT_FREQ);
@@ -68,14 +67,14 @@ public class TfIdfUtil implements Serializable {
         filter.insertStopRegexes("\\d{1}$");
         filter.insertStopRegexes("\\s*|\t|\r|\n");
         filter.insertStopRegexes("[a-zA-Z’!\"#$%&\\'()（），。　\u0001\u0007*+,-÷./:：;；|<=>?@，—。?★、…【】？“”‘’！[\\\\]^_`{|}~·±]+");
-        return filter;
+        this.preFilter = filter;
     }
 
     /**
      * split all documents
      */
     private void splitAllDocsWords() {
-        Recognition filter = this.preFilter();
+        Recognition filter = this.preFilter;
         documentWords = new ArrayList<>(getDocumentsCounts());
         for (String document : documents) {
             documentWords.add(docSegmentation(document, filter));
@@ -207,7 +206,7 @@ public class TfIdfUtil implements Serializable {
      * @return indices list for top k
      */
     public List<Integer> getRelevantTopKIndices(String queryStr, int k) {
-        Recognition filter = this.preFilter();
+        Recognition filter = this.preFilter;
         List<String> queryTermList = this.docSegmentation(queryStr, filter);
         //get term frequency for query statement
         Map<String, Integer> countMap = this.calTf(queryTermList);
