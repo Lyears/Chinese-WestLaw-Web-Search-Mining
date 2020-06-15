@@ -65,8 +65,18 @@ public class BooleanIndexCollection extends IndexAbstract{
 
         List<String> rearEqn = BooleanQueryParser.convertMidEqnToRearEqn(queryString);
         Stack<String> queryStack = new Stack<>();
-        HashMap<String, TreeSet<Integer>> tmpMap = new HashMap<String, TreeSet<Integer>>();
+        HashMap<String, TreeSet<Integer>> tmpMap = new HashMap<>();
         TreeSet<Integer> feedback = null;
+
+        // meaning only one item is quried
+        if (rearEqn.size() == 1) {
+            String var1 = rearEqn.get(0);
+            List<String> var1KV = BooleanQueryParser.splitValueAndKey(var1);
+            feedback =  new TreeSet<>();
+            PostingListOperation.opORPostingLists(feedback, queryWithKeyValue(var1KV.get(1), var1KV.get(0)));
+            return feedback;
+        }
+        // at least two parts
         for (String str : rearEqn) {
             if (str.length() == 0) {
                 throw new QueryFormatException(2, "query instance format error");
