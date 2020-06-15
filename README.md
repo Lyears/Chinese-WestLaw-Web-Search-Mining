@@ -1,24 +1,48 @@
 # Chinese-WestLaw-Web-Search-Mining
 A simple Chinese WestLaw Web searching system, as the final project for WSM2020, SJTU.
 
+## Basic Information
+This project is a simple information retrieval system  
+
+## Prerequisites
+
+### Requirements
+Our system has the following requirements.
+- JDK 11
+- Gradle, version 6.4.1
+- git
+
+### Other preparations
+
+You can clone our infomation retrieval project from github.
+```
+git clone git@github.com:zhengjilai/Chinese-WestLaw-Web-Search-Mining.git
+cd Chinese-WestLaw-Web-Search-Mining && export PROJECT_DIR=$(pwd)
+```
+
+Before building up the project, please also set up the environment variable `WSM_ROOT_DIR` in your shell.
+This directory is the home path for all other resources, such as dataset, and all the indexes constructed.
+For several reasons, we recommend you to separate `WSM_ROOT_DIR` from `PROJECT_DIR`. 
+```
+export WSM_ROOT_DIR=/your/path/to/all/resources
+```
+
 ## Dataset
-The dataset is provided by [Kenny Zhu](http://cs.sjtu.edu.cn/~kzhu/), 
-with court records of legal cases in China in Chinese.
-You can download raw data and feed it into our system as follows.
+The WestLaw dataset is provided by [Kenny Zhu](http://cs.sjtu.edu.cn/~kzhu/), 
+with court records of legal cases in China in Chinese, collected from three different sources.
+
+You can download raw data, unzip all three parts as follows.
 
 ```
-cd $DATA_ROOT_DIR$
+cd $WSM_ROOT_DIR
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/data1.zip
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/data2.zip
 wget https://adapt.seiee.sjtu.edu.cn/wsm2020/wsm_proj1_data/instruments.zip
-unzip data1.zip && unzip data2.zip && unzip instruments.zip
-rm *.zip
+unzip data1.zip && unzip data2.zip && unzip instruments.zip && rm *.zip
 ```
 
-## Requirements
-Our system has the following requirements.
-- Java, version 11+
-- Gradle, version 5.0.0+
+As long as you have set up the environment variable `WSM_ROOT_DIR`, 
+our project can work without any extra configuration.
 
 ## Contributors
 - [Jilai Zheng](https://github.com/zhengjilai)
