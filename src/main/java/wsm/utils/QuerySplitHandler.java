@@ -115,6 +115,27 @@ public class QuerySplitHandler {
         return feedback;
     }
 
+    /**
+     * split an iname string
+     * @param iname the iname string
+     * @return an Array for iname keys
+     */
+    public static ArrayList<String> inameSplitter(String iname) {
+        ArrayList<String> feedback = new ArrayList<>();
+
+        String inameRepPattern = "法定代表人：.*";
+        Pattern inameRepRegex = Pattern.compile(inameRepPattern);
+        Matcher inameRepMatch = inameRepRegex.matcher(iname);
+        if (inameRepMatch.find()) {
+            String foundCorp = iname.substring(0, inameRepMatch.start());
+            feedback.add(foundCorp.replace('（',' ').replace('(',' ').trim());
+            feedback.add(iname.substring(inameRepMatch.start()+6, inameRepMatch.end())
+                    .replace('）',' ').replace(')',' ').trim());
+        } else {
+            feedback.add(iname);
+        }
+        return feedback;
+    }
 
     public static void main(String[] args) {
 
@@ -137,6 +158,13 @@ public class QuerySplitHandler {
         for (String caseCode: caseCodes) {
             ArrayList<String> caseCodeList = caseCodeSplitter(caseCode);
             System.out.println(caseCodeList);
+        }
+
+        List<String> inames = Arrays.asList("上海爱尔爱司动力机械有限公司（法定代表人：陈平）",
+                "陈平", "上海爱尔爱司动力机械有限公司");
+        for (String iname: inames) {
+            ArrayList<String> inameList = inameSplitter(iname);
+            System.out.println(inameList);
         }
 
     }

@@ -61,6 +61,7 @@ public class IndexConsts {
         put("义务", "duty");
     }};
 
+    // the pre-query string replacement map
     public static final HashMap<String, String> replaceMapPre = new HashMap<String, String>(){{
         put("\u00A0", "");
         put(" ", "");
@@ -68,6 +69,5 @@ public class IndexConsts {
         put("}", ">");
     }};
 
-
-
+    public static float fuzzyThreshold = (float) 0.85;
 }

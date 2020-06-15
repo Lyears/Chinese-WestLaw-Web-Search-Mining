@@ -49,7 +49,6 @@ public class FuzzyQueryHandler {
                                                    Set<String> candidateSet) {
         ArrayList<String> feedback = new ArrayList<>();
         for (String candidate: candidateSet) {
-            System.out.println((float)getEditDistance(candidate, key));
             if ( ((float)getEditDistance(candidate, key)) /
                     Math.max(candidate.length(), key.length()) <= 1.0 - threshold + 0.0001) {
                 feedback.add(candidate);

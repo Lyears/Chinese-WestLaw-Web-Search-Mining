@@ -18,6 +18,10 @@ public class BooleanIndexConstruction {
         // the root dir for wsm dataset (the folder of unzipping *.zip)
 //        String wsmRootDir = "/home/jlzheng/src/java/wsm-dataset/resources";
         String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        if (wsmRootDir == null) {
+            System.out.println("Please first set environment variable WSM_ROOT_DIR");
+            return;
+        }
 
         // construct an index for id -> doc
         ArrayList<Integer> docNumList = new ArrayList<>();
@@ -46,7 +50,7 @@ public class BooleanIndexConstruction {
         ArrayList<CourtInfo> courtInfos = new ArrayList<>();
         List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
 
-        for (int i = 0; i < docIdOffset.size(); i++) {
+        for (int i = 0; i < docIdOffset.size()-1; i++) {
             for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++) {
 //            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + 3000; docId++){
 

@@ -1,13 +1,16 @@
 package wsm.engine.booleanIndex;
 
+import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.engine.auxiliaryIndex.IndexIdToDoc;
 import wsm.models.CourtInfo;
+import wsm.models.CourtInfoLoader;
 import wsm.models.PeopleInfoZxgk;
 import wsm.utils.DiskIOHandler;
+import wsm.utils.FuzzyQueryHandler;
+import wsm.utils.PostingListOperation;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class IndexNoWordSplit extends IndexAbstract implements Serializable {
 
@@ -61,10 +64,23 @@ public class IndexNoWordSplit extends IndexAbstract implements Serializable {
 
     @Override
     public TreeSet<Integer> queryFromRequestString(String queryString) {
-        if (inverseIndex.containsKey(queryString)) {
-            return inverseIndex.get(queryString);
+
+        TreeSet<Integer> feedback = new TreeSet<>();
+        // if the query string directly occurs in inverse index
+        if (inverseIndex.containsKey(queryString)){
+            feedback = (TreeSet<Integer>) inverseIndex.get(queryString).clone();
+            return feedback;
         }
-        return null;
+
+        // if there is no exact matching, find most similar keys in key set
+        List<String> similarKeys = FuzzyQueryHandler.findMostSimilarKeys(
+                queryString, IndexConsts.fuzzyThreshold, inverseIndex.keySet());
+
+        // OR all the intermediate result
+        for (String key: similarKeys) {
+            PostingListOperation.opORPostingLists(feedback, inverseIndex.get(key));
+        }
+        return feedback;
     }
 
     @Override
@@ -82,5 +98,38 @@ public class IndexNoWordSplit extends IndexAbstract implements Serializable {
     public static IndexNoWordSplit recoverIndexFromDisk(String fileRootPath, String keyWord){
         String fileName = fileRootPath + "/boolean_index/no_word_split/" + keyWord;
         return (IndexNoWordSplit) DiskIOHandler.readObjectFromFile(fileName);
+    }
+
+    public static void main(String[] args) {
+        String testKey = "courtPhone";
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        if (wsmRootDir == null) {
+            System.out.println("Please first set environment variable WSM_ROOT_DIR");
+            return;
+        }
+        IndexNoWordSplit indexNoWordSplit = recoverIndexFromDisk(wsmRootDir, testKey);
+        IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
+
+        List<String> queryStringList = Arrays.asList("38794519", "38794444", "38794518");
+
+        for (String queryString: queryStringList) {
+            System.out.printf("Begin to query %s\n", queryString);
+            TreeSet<Integer> res = indexNoWordSplit.queryFromRequestString(queryString);
+            if (res == null) {
+                System.out.printf("Query Fails for %s.\n", queryString);
+                continue;
+            }
+            int count = 0;
+            for (Integer docId: res) {
+                CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
+                        indexIdToDoc.getDocFileNameFromID(docId), docId, IndexConsts.docIdOffsetList);
+                System.out.println(courtInfo.toString());
+                count ++;
+                if (count > 50) {
+                    break;
+                }
+            }
+        }
+
     }
 }
