@@ -117,10 +117,13 @@ public class QuerySplitHandler {
 
 
     public static void main(String[] args) {
-        String normalQuery1 = "哈哈嘻嘻和呼呼 ， 在上海虹桥机场南路钓鱼。 ";
-        String normalQuery2 = "范志明；；；范志毅等";
-        ArrayList<String> wordList1 = indexSplitter(normalQuery2);
-        System.out.println(wordList1);
+
+        List<String> normalQueryList = Arrays.asList("哈哈嘻嘻和呼呼 ， 在上海虹桥机场南路钓鱼。 ",
+                "范志明；；；范志毅等", "浦东新区人民法院");
+        for (String normalQuery: normalQueryList) {
+            ArrayList<String> wordList = indexSplitter(normalQuery);
+            System.out.println(wordList);
+        }
 
         LocalDate date = LocalDate.now();
         ArrayList<String> dateList1 = dateSplitter(date);
@@ -129,7 +132,8 @@ public class QuerySplitHandler {
         List<String> caseCodes = Arrays.asList(" （2020）沪72执恢3号",
                 "（）沪72执恢  第782178-号",
                 "2013年昌执字第00603号",
-                "？？2017？？？？0422？177？？");
+                "？？2017？？？？0422？177？？",
+                "浦东新区人民法院");
         for (String caseCode: caseCodes) {
             ArrayList<String> caseCodeList = caseCodeSplitter(caseCode);
             System.out.println(caseCodeList);

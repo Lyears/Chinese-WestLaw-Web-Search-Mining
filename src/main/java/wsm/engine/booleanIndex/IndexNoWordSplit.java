@@ -80,7 +80,7 @@ public class IndexNoWordSplit extends IndexAbstract implements Serializable {
      * @return the recovered Index object
      */
     public static IndexNoWordSplit recoverIndexFromDisk(String fileRootPath, String keyWord){
-        String fileName = fileRootPath + "/boolean_index/no_word_cut/" + keyWord;
+        String fileName = fileRootPath + "/boolean_index/no_word_split/" + keyWord;
         return (IndexNoWordSplit) DiskIOHandler.readObjectFromFile(fileName);
     }
 }

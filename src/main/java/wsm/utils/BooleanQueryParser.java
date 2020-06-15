@@ -21,6 +21,11 @@ public class BooleanQueryParser {
             throw new QueryFormatException(0, "Cannot parse null or empty string");
         }
 
+        // filter the query instance
+        for (Map.Entry<String, String> entry : IndexConsts.replaceMapPre.entrySet()) {
+            queryString = queryString.replace(entry.getKey(), entry.getValue());
+        }
+
         // the stack for operations
         Stack<Character> stack = new Stack<>();
         // the inverse Poland query String
@@ -124,8 +129,8 @@ public class BooleanQueryParser {
      */
     public static List<String> splitValueAndKey(String queryString) {
 
-        // first filter the query instance
-        for (Map.Entry<String, String> entry : IndexConsts.replaceMap.entrySet()) {
+        // filter the query instance
+        for (Map.Entry<String, String> entry : IndexConsts.replaceMapPre.entrySet()) {
             queryString = queryString.replace(entry.getKey(), entry.getValue());
         }
 
@@ -139,6 +144,10 @@ public class BooleanQueryParser {
             if (match.find()){
                 feedback.add(queryString.substring(0, match.start()).trim());
                 feedback.add(queryString.substring(match.start() + 1, match.end() - 1));
+                // filter the query instance
+                for (Map.Entry<String, String> entry : IndexConsts.replaceMap.entrySet()) {
+                    feedback.set(1, feedback.get(1).replace(entry.getKey(), entry.getValue()));
+                }
             } else {
                 feedback.add(queryString);
                 feedback.add("all");
@@ -150,31 +159,22 @@ public class BooleanQueryParser {
 
     public static void main(String[] arg){
 
-        // boolean query parse test1
-        String testQuery1 = "jzm<iname> | less<id> & 9225";
-        List<String> parseResult1 = BooleanQueryParser.convertMidEqnToRearEqn(testQuery1);
-        System.out.println(parseResult1);
-        // boolean query parse test2
-        String testQuery2 = "jzm<iname> & less<id> | 9225 ^ 4000";
-        List<String> parseResult2 = BooleanQueryParser.convertMidEqnToRearEqn(testQuery2);
-        System.out.println(parseResult2);
-        // boolean query parse test 3
-        String testQuery3 = "12|34|56|78";
-        List<String> parseResult3 = BooleanQueryParser.convertMidEqnToRearEqn(testQuery3);
-        System.out.println(parseResult3);
+        // boolean query parse test
+        List<String> testQueryList = Arrays.asList("jzm<案号> | less<id> & 9225",
+                "jzm<iname> & less<id> | 9225 ^ 4000",
+                "(浦东新区人民法院{执行法院}& 2020<caseCode>) \\ 男<sexy>",
+                "12|34|56|78");
+        for (String testQuery: testQueryList) {
+            List<String> parseResult = BooleanQueryParser.convertMidEqnToRearEqn(testQuery);
+            System.out.println(parseResult);
+        }
 
-        // KV split test 1
-        String testSplit1 = "qk{性别}";
-        List<String> splitResult1 = BooleanQueryParser.splitValueAndKey(testSplit1);
-        System.out.println(splitResult1);
-        // KV split test 2
-        String testSplit2 = "qk  ";
-        List<String> splitResult2 = BooleanQueryParser.splitValueAndKey(testSplit2);
-        System.out.println(splitResult2);
-        // KV split test 3
-        String testSplit3 = "qk<ina 9225";
-        List<String> splitResult3 = BooleanQueryParser.splitValueAndKey(testSplit3);
-        System.out.println(splitResult3);
+        // KV split test
+        List<String> testSplitList = Arrays.asList("年龄{性别}", "qk  ", "qk<ina 9225");
+        for (String testSplit: testSplitList) {
+            List<String> splitResult = BooleanQueryParser.splitValueAndKey(testSplit);
+            System.out.println(splitResult);
+        }
     }
 
 }

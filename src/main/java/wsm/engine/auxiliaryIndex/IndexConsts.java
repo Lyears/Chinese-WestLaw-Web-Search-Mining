@@ -30,11 +30,6 @@ public class IndexConsts {
 
     // the query key replacement map
     public static final HashMap<String, String> replaceMap = new HashMap<String, String>(){{
-        put("\u00A0", "");
-        put(" ", "");
-        put("{", "<");
-        put("}", ">");
-//        put("", "id");
         put("年龄", "age");
         put("性别", "sexy");
         put("身份证号码", "cardNum");
@@ -66,5 +61,11 @@ public class IndexConsts {
         put("义务", "duty");
     }};
 
+    public static final HashMap<String, String> replaceMapPre = new HashMap<String, String>(){{
+        put("\u00A0", "");
+        put(" ", "");
+        put("{", "<");
+        put("}", ">");
+    }};
 
 }

@@ -33,8 +33,8 @@ public class DiskIOHandler {
         FileInputStream in;
         try {
             in = new FileInputStream(file);
-            ObjectInputStream objIn=new ObjectInputStream(in);
-            temp=objIn.readObject();
+            ObjectInputStream objIn = new ObjectInputStream(in);
+            temp = objIn.readObject();
             objIn.close();
             System.out.println("read object success!");
         } catch (IOException e) {

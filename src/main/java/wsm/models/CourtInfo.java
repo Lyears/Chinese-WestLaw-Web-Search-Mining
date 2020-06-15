@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 /*
     the overall object for court information
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class CourtInfo {
 
     // fields from Hshfy
@@ -77,5 +79,42 @@ public class CourtInfo {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "CourtInfo{" +
+                "caseCode='" + caseCode + '\'' +
+                ", iname='" + iname + '\'' +
+                ", address='" + address + '\'' +
+                ", money='" + money + '\'' +
+                ", applicant='" + applicant + '\'' +
+                ", courtName='" + courtName + '\'' +
+                ", courtPhone='" + courtPhone + '\'' +
+                ", id=" + id +
+                ", age=" + age +
+                ", sexy='" + sexy + '\'' +
+                ", cardNum='" + cardNum + '\'' +
+                ", businessEntity='" + businessEntity + '\'' +
+                ", areaName='" + areaName + '\'' +
+                ", partyTypeName='" + partyTypeName + '\'' +
+                ", gistId='" + gistId + '\'' +
+                ", regDate=" + regDate +
+                ", gistUnit='" + gistUnit + '\'' +
+                ", duty='" + duty + '\'' +
+                ", performance='" + performance + '\'' +
+                ", performedPart='" + performedPart + '\'' +
+                ", unperformPart='" + unperformPart + '\'' +
+                ", disruptTypeName='" + disruptTypeName + '\'' +
+                ", publishDate=" + publishDate +
+                ", peopleInfo=" + Arrays.toString(peopleInfo) +
+                ", instrumentId='" + instrumentId + '\'' +
+                ", theme='" + theme + '\'' +
+                ", type='" + type + '\'' +
+                ", cause='" + cause + '\'' +
+                ", courtLevel='" + courtLevel + '\'' +
+                ", caseDue=" + caseDue +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

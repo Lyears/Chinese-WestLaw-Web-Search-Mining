@@ -1,10 +1,11 @@
 package wsm.engine.booleanIndex;
 
+import wsm.engine.auxiliaryIndex.IndexIdToDoc;
 import wsm.exception.QueryFormatException;
 import wsm.models.CourtInfo;
 import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.models.CourtInfoLoader;
 import wsm.utils.BooleanQueryParser;
-import wsm.utils.DiskIOHandler;
 import wsm.utils.PostingListOperation;
 
 import java.util.*;
@@ -33,6 +34,10 @@ public class BooleanIndexCollection extends IndexAbstract{
 
     public IndexAbstract getIndexFromKey(String key) {
         return indexCollection.get(key);
+    }
+
+    public void SetIndexFromKey(String key, IndexAbstract indexAbstract){
+        indexCollection.put(key, indexAbstract);
     }
 
     /**
@@ -102,7 +107,8 @@ public class BooleanIndexCollection extends IndexAbstract{
                 } else if (str.equals("^")) {
                     PostingListOperation.opSYMDIFPostingLists(feedbackVar1, feedbackVar2);
                     newKey = "c^^" + var1 + var2;
-                } else if (str.equals("\\")) {
+                } else {
+                    // the case "\\", SUB operation
                     PostingListOperation.opSUBPostingLists(feedbackVar1, feedbackVar2);
                     newKey = "c\\\\" + var1 + var2;
                 }
@@ -156,17 +162,48 @@ public class BooleanIndexCollection extends IndexAbstract{
 
         // recover all generated Boolean Indexes
         for (String noSplitKey: IndexConsts.noSplitKeys){
-            booleanIndexCollection.getIndexFromKey(noSplitKey).storeIndexToDisk(fileRootPath);
+            booleanIndexCollection.SetIndexFromKey(noSplitKey,
+                    IndexNoWordSplit.recoverIndexFromDisk(fileRootPath, noSplitKey));
         }
         for (String normalSplitKey: IndexConsts.normalSplitKeys){
-            booleanIndexCollection.getIndexFromKey(normalSplitKey).storeIndexToDisk(fileRootPath);
+            booleanIndexCollection.SetIndexFromKey(normalSplitKey,
+                    IndexNormalSplit.recoverIndexFromDisk(fileRootPath, normalSplitKey));
         }
         for (String localDateKey: IndexConsts.localDateKeys) {
-            booleanIndexCollection.getIndexFromKey(localDateKey).storeIndexToDisk(fileRootPath);
+            booleanIndexCollection.SetIndexFromKey(localDateKey,
+                    IndexLocalDate.recoverIndexFromDisk(fileRootPath, localDateKey));
         }
-        booleanIndexCollection.getIndexFromKey("duty").storeIndexToDisk(fileRootPath);
-        booleanIndexCollection.getIndexFromKey("caseCode").storeIndexToDisk(fileRootPath);
+        booleanIndexCollection.SetIndexFromKey("duty",
+                IndexDuty.recoverIndexFromDisk(fileRootPath));
+        booleanIndexCollection.SetIndexFromKey("caseCode",
+                IndexCaseCode.recoverIndexFromDisk(fileRootPath));
         return booleanIndexCollection;
+    }
+
+    public static void main(String[] args) {
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        if (wsmRootDir == null) {
+            System.out.println("Please first set environment variable WSM_ROOT_DIR");
+            return;
+        }
+        BooleanIndexCollection booleanIndexCollection = BooleanIndexCollection.recoverIndexFromDisk(wsmRootDir);
+        IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
+
+        List<String> queryStringList = Arrays.asList("(浦东新区人民法院{执行法院}& 2020<caseCode>) \\ 男<sexy>");
+
+        for (String queryString: queryStringList) {
+            TreeSet<Integer> res = booleanIndexCollection.queryFromRequestString(queryString);
+            if (res == null) {
+                System.out.printf("Query Fails for %s.\n", queryString);
+                continue;
+            }
+            for (Integer docId: res) {
+                CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
+                        indexIdToDoc.getDocFileNameFromID(docId), docId, IndexConsts.docIdOffsetList);
+                System.out.println(courtInfo.toString());
+            }
+        }
+
     }
 
 }
