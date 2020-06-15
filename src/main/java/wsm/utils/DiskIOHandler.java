@@ -4,19 +4,18 @@ import java.io.*;
 
 public class DiskIOHandler {
 
-    public static void writeObjectToFile(Object obj, String filePath)
-    {
+    public static void writeObjectToFile(Object obj, String filePath) {
 
-        File file =new File(filePath);
+        File file = new File(filePath);
         File parentFile = file.getParentFile();
-        if (!parentFile.exists()){
+        if (!parentFile.exists()) {
             parentFile.mkdirs();
         }
 
         FileOutputStream out;
         try {
             out = new FileOutputStream(file);
-            ObjectOutputStream objOut=new ObjectOutputStream(out);
+            ObjectOutputStream objOut = new ObjectOutputStream(out);
             objOut.writeObject(obj);
             objOut.flush();
             objOut.close();
@@ -28,15 +27,15 @@ public class DiskIOHandler {
     }
 
     public static Object readObjectFromFile(String filePath) {
-        Object temp=null;
-        File file =new File(filePath);
+        Object temp = null;
+        File file = new File(filePath);
         FileInputStream in;
         try {
             in = new FileInputStream(file);
             ObjectInputStream objIn = new ObjectInputStream(in);
             temp = objIn.readObject();
+            System.out.println(temp.getClass().getName() + ":read object success!");
             objIn.close();
-            System.out.println("read object success!");
         } catch (IOException e) {
             System.out.println("read object failed");
             e.printStackTrace();

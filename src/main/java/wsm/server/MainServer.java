@@ -1,9 +1,11 @@
 package wsm.server;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.ModelAndView;
+import wsm.server.repository.IndexRepository;
 import wsm.server.repository.InstrumentRepository;
+import wsm.server.service.IndexService;
 import wsm.server.service.InstrumentService;
 
 @SpringBootApplication
@@ -15,8 +17,13 @@ public class MainServer {
     }
 
     @Bean
-    public InstrumentRepository instrumentRepository(){
+    public InstrumentRepository instrumentRepository() {
         return new InstrumentService();
+    }
+
+    @Bean
+    public IndexRepository indexRepository() {
+        return new IndexService();
     }
 
 }

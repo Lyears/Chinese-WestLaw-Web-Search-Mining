@@ -12,11 +12,10 @@ import wsm.utils.TfIdfUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class InstrumentService implements InstrumentRepository {
 
     private final String wsmRootDir = System.getenv("WSM_ROOT_DIR");
-    private TfIdfUtil tfIdfUtil = TfIdfUtil.recoverFromDisk(wsmRootDir);
+    private final TfIdfUtil tfIdfUtil = TfIdfUtil.recoverFromDisk(wsmRootDir);
 
     @Override
     public List<CourtInfo> queryInstrument(String query) {

@@ -159,7 +159,7 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
         IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
 
         List<String> queryStringList = Arrays.asList(
-                "上海明仑贸易有限公司", "李明", "上海市森海园艺发展有限公司h"
+                "上海明仑贸易有限公司", "李明", "上海市森海园艺发展有限公司h", "卢秀连"
         );
 
         for (String queryString: queryStringList) {

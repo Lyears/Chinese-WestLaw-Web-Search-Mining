@@ -14,6 +14,7 @@ public class GlobalExceptionController {
     public ModelAndView ExceptionControl(HttpServletRequest req, QueryFormatException e) {
         String query = req.getParameter("query");
         ModelAndView mav = new ModelAndView("index");
+        System.out.println(e.getDescription());
         mav.addObject("exception", e);
         mav.addObject("query", query);
         return mav;

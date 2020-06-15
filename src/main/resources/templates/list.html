@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List-Chinese-WestLaw</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}">
+    <style type="text/css">
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <a class="navbar-brand" href="#"><img th:src="@{/images/icon.png}" height="36" width="24"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+            <a class="nav-link" href="/#">Home </a>
+        </li>
+    </ul>
+</nav>
+<div class="container px-lg-3">
+    <div class="row " style="margin: 1%">
+        <div th:each="court :${page.getCurPageData()}" class="col-12">
+            <div class="alert alert-dark" role="alert">
+                <a href="#" class="alert-link" th:text="${court.getIname()}">an example link</a>
+                <button type="button" class="btn btn-dark" data-toggle="modal"
+                        style="position: absolute;top: 0.275rem;right: 0.375rem"
+                        th:data-target="${'#'+ court.getIname().hashCode()}">Details
+                </button>
+            </div>
+        </div>
+        <div th:each="court :${page.getCurPageData()}">
+            <div class="modal fade " role="dialog" tabindex="-1"
+                 th:id="${court.getIname().hashCode()}">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" th:text="${court.getIname()}">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <h5>案号</h5>
+                            <p th:text="${court.getCaseCode()}"></p>
+                            <hr>
+                            <h5>被执行人</h5>
+                            <p th:text="${court.getIname()}"></p>
+                            <hr>
+                            <h5>被执行人地址</h5>
+                            <p th:text="${court.getAddress()}"></p>
+                            <hr>
+                            <h5>被执行标的金额（元）</h5>
+                            <p th:text="${court.getMoney()}"></p>
+                            <hr>
+                            <h5>申请执行人</h5>
+                            <p th:text="${court.getApplicant()}"></p>
+                            <hr>
+                            <h5>承办法院</h5>
+                            <p th:text="${court.getCourtName()}"></p>
+                            <hr>
+                            <h5>联系电话</h5>
+                            <p th:text="${court.getCourtPhone()}"></p>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container text-center">
+        <p>Copyright (c) 2020</p>
+        <p>Powered By Bootstrap</p>
+    </div>
+</footer>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+</body>
+</html>

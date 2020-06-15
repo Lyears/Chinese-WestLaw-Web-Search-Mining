@@ -8,6 +8,6 @@ import java.util.List;
 @Component
 public interface IndexRepository {
 
-    List<CourtInfo> IndexQuery(String query);
+    List<CourtInfo> indexQuery(String query);
 
 }
