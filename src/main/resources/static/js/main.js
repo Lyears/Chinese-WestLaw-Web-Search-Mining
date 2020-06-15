@@ -12,7 +12,7 @@ $('#sortType').children("a").click(function () {
                 "sortType": 1,
                 "page": 1
             }
-            window.location.href = "/list?" + "searchType=" + searchType + "&searchValue=" + queryStr + "&sortType=0&page=0"
+            httpPost("/list", params)
             break;
         case "Sorted by Date":
             break;
@@ -35,6 +35,7 @@ function httpPost(url, args) {
         input.val(args[arg])
         form.append(input)
     }
+    $('body').append(form)
     form.submit()
 }
 

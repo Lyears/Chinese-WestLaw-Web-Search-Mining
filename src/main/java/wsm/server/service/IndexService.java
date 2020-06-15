@@ -28,6 +28,7 @@ public class IndexService implements IndexRepository {
             for (Integer docId : res) {
                 CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
                         indexIdToDoc.getDocFileNameFromID(docId), docId, IndexConsts.docIdOffsetList);
+                courtInfo.setDocId("doc" + docId);
                 result.add(courtInfo);
             }
         }

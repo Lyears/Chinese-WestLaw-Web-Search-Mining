@@ -18,7 +18,7 @@ import java.util.Arrays;
 @NoArgsConstructor
 
 public class CourtInfo {
-
+    private String docId;
     // fields from Hshfy
     private String caseCode;
     private String iname;
@@ -84,7 +84,8 @@ public class CourtInfo {
     @Override
     public String toString() {
         return "CourtInfo{" +
-                "caseCode='" + caseCode + '\'' +
+                "docId=" + docId +
+                ", caseCode='" + caseCode + '\'' +
                 ", iname='" + iname + '\'' +
                 ", address='" + address + '\'' +
                 ", money='" + money + '\'' +
