@@ -247,6 +247,10 @@ public class TfIdfUtil implements Serializable {
 
     public static void main(String[] args) {
         String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        if (wsmRootDir == null) {
+            System.out.println("Please first set environment variable WSM_ROOT_DIR");
+            return;
+        }
         initialize(wsmRootDir);
     }
 }
