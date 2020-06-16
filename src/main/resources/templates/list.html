@@ -39,7 +39,8 @@
     <div class="row " style="margin: 1%">
         <div th:each="court :${page.getCurPageData()}" class="col-12">
             <div class="alert alert-dark" role="alert">
-                <a href="#" class="alert-link" th:text="${court.getCaseCode()+ ' ' +court.getIname()}">an example link</a>
+                <a href="#" class="alert-link" th:text="${court.getCaseCode()+ ' ' +court.getIname()}">an example
+                    link</a>
                 <button type="button" class="btn btn-dark" data-toggle="modal"
                         style="position: absolute;top: 0.275rem;right: 0.375rem"
                         th:data-target="${'#'+ court.getDocId()}">Details
@@ -52,7 +53,8 @@
                 <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" th:text="${court.getCaseCode()+ ' ' +court.getIname()}">Modal title</h5>
+                            <h5 class="modal-title" th:text="${court.getCaseCode()+ ' ' +court.getIname()}">Modal
+                                title</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -91,6 +93,16 @@
     </div>
 </div>
 
+<nav aria-label="Page navigation">
+    <ul id="paginationUI" class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</nav>
+
 <footer class="footer">
     <div class="container text-center">
         <p>Copyright (c) 2020</p>
@@ -99,5 +111,60 @@
 </footer>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
+<script type="text/JavaScript" th:inline="javascript">
+    var curPage = [[${page.getCurPage()}]]
+    var totalPages = [[${page.getTotalPages()}]]
+    var totalCount = [[${page.getTotalCount()}]]
+    var pageSize = [[${page.getPageSize()}]]
+    var hasFirstPage = [[${page.hasFirstPage()}]]
+    var hasLastPage = [[${page.hasLastPage()}]]
+    var hasNextPage = [[${page.hasNextPage()}]]
+    var hasPreviousPage = [[${page.hasPreviousPage()}]]
+    var buttonSize = 10
+
+    var initializePagination = function (paginationUI) {
+        paginationUI.empty()
+        var paginationItems = ''
+        if (totalPages == 0 || totalCount < pageSize) {
+            return
+        }
+        paginationItems += ' <li id="firstPage" class="page-item"><a class="page-link" href="#">First</a></li>\n' +
+            ' <li id="prePage" class="page-item"><a class="page-link" href="#">Previous</a></li>\n'
+
+        var start = Math.floor((curPage - 2) / (buttonSize - 2)) * (buttonSize - 2)
+        start = start + buttonSize > totalPages ? totalPages - buttonSize : start
+        start = start >= 0 ? start : 0
+
+        for (var i = start + 1; i <= start + buttonSize; i++) {
+            if (i > totalPages || buttonSize < 3) break;
+            paginationItems += '<li' + (i == curPage ? ' class="page-item active"' : ' class="page-item"') + '><a class="page-link" href="#">' + i + '</a></li>'
+        }
+
+        paginationItems += '<li id="nextPage" class="page-item"><a class="page-link" href="#">Next</a></li>\n' +
+            '<li id="lastPage" class="page-item"><a class="page-link" href="#">Last</a></li>'
+
+        paginationUI.html(paginationItems)
+        if (!hasFirstPage) {
+            $('#firstPage').addClass('disabled')
+        }
+        if (!hasLastPage) {
+            $('#lastPage').addClass('disabled')
+        }
+        if (!hasNextPage) {
+            $('#nextPage').addClass('disabled')
+        }
+        if (!hasPreviousPage) {
+            $('#prePage').addClass('disabled')
+        }
+    }
+
+    $(document).ready(function () {
+        initializePagination($('#paginationUI'))
+    })
+
+    if (curPage < 3) {
+
+    }
+</script>
 </body>
 </html>

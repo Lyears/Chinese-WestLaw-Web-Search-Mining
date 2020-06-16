@@ -15,10 +15,6 @@ import java.util.List;
 @Controller
 public class SearchController {
 
-    private final int DEFAULT_SORT = 0;
-    private final int AGE_SORT = 1;
-    private final int DATE_SORT = 2;
-    private final int NAME_SORT = 3;
 
     @Autowired
     private InstrumentRepository instrumentRepository;
@@ -33,14 +29,11 @@ public class SearchController {
     }
 
     @RequestMapping("/instruments")
-    public ModelAndView instruments(@RequestParam("searchType") String searchType,
-                                    @RequestParam(name = "sortType", required = false) Integer sortType,
-                                    @RequestParam("searchValue") String searchValue) {
+    public ModelAndView instruments(@RequestParam("searchValue") String searchValue) {
         ModelAndView mav = new ModelAndView("instruments");
-        if (searchType.equals("query")) {
 //            System.out.println(instrumentRepository.queryInstrument(searchValue).toString());
-            mav.addObject("instruments", instrumentRepository.queryInstrument(searchValue));
-        }
+        mav.addObject("instruments", instrumentRepository.queryInstrument(searchValue));
+
         return mav;
     }
 
@@ -52,7 +45,7 @@ public class SearchController {
         ModelAndView mav = new ModelAndView("list");
         System.out.println(searchValue);
         if (searchType.equals("boolean")) {
-            List<CourtInfo> result = indexRepository.indexQuery(searchValue);
+            List<CourtInfo> result = indexRepository.indexQuery(searchValue, sortType);
             Page<CourtInfo> page = new Page<>(pageNum, 20, result.size(), result);
             mav.addObject("page", page);
         }

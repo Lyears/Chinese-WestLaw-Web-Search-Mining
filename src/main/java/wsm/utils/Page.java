@@ -64,14 +64,10 @@ public class Page<T> {
     private List<T> data;
 
     public static void main(String[] args) {
-        Page p = new Page();
-        p.setTotalCount(53344);
-        System.out.println("总页数" + p.getTotalPages());
-        p.setCurPage(50);
-        System.out.println("有首页:" + p.hasFirstPage());
-        System.out.println("有上一页:" + p.hasPreviousPage());
-        System.out.println("有下一页:" + p.hasNextPage());
-        System.out.println("有尾页页:" + p.hasLastPage());
+        String a = "123456";
+        String b = "9992345";
+        System.out.println(a.compareTo(b));
+
 
     }
 }
