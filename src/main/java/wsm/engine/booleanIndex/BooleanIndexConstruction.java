@@ -50,9 +50,9 @@ public class BooleanIndexConstruction {
         ArrayList<CourtInfo> courtInfos = new ArrayList<>();
         List<Integer> docIdOffset = IndexConsts.docIdOffsetList;
 
-        for (int i = 0; i < docIdOffset.size()-1; i++) {
-            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++) {
-//            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + 3000; docId++){
+        for (int i = 0; i < docIdOffset.size(); i++) {
+//            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + docNumList.get(i); docId++) {
+            for (int docId = docIdOffset.get(i); docId < docIdOffset.get(i) + 3000; docId++){
 
                 CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
                         indexIdToDoc.getDocFileNameFromID(docId), docId, docIdOffset);

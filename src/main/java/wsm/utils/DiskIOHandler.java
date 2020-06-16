@@ -19,7 +19,7 @@ public class DiskIOHandler {
             objOut.writeObject(obj);
             objOut.flush();
             objOut.close();
-            System.out.println("Write object success!");
+            System.out.println(obj.getClass().getName() + " : write object succeeded!");
         } catch (IOException e) {
             System.out.printf("Write object failed, error %s", e);
             e.printStackTrace();
@@ -34,7 +34,7 @@ public class DiskIOHandler {
             in = new FileInputStream(file);
             ObjectInputStream objIn = new ObjectInputStream(in);
             temp = objIn.readObject();
-            System.out.println(temp.getClass().getName() + ":read object success!");
+            System.out.println(temp.getClass().getName() + " : read object succeeded!");
             objIn.close();
         } catch (IOException e) {
             System.out.println("read object failed");

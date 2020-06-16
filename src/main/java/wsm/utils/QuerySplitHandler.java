@@ -153,8 +153,7 @@ public class QuerySplitHandler {
         List<String> caseCodes = Arrays.asList(" （2020）沪72执恢3号",
                 "（）沪72执恢  第782178-号",
                 "2013年昌执字第00603号",
-                "？？2017？？？？0422？177？？",
-                "浦东新区人民法院");
+                "？？2017？？？？0422？177？？");
         for (String caseCode: caseCodes) {
             ArrayList<String> caseCodeList = caseCodeSplitter(caseCode);
             System.out.println(caseCodeList);

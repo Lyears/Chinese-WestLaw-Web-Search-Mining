@@ -67,7 +67,13 @@ public class IndexConsts {
         put(" ", "");
         put("{", "<");
         put("}", ">");
+        put("AND", "&");
+        put("OR", "|");
+        put("SUB", "\\");
+        put("XOR", "^");
+        put("SIMDIF", "^");
     }};
 
     public static float fuzzyThreshold = (float) 0.85;
+    public static float fuzzyThresholdCaseCode = (float) 0.90;
 }
