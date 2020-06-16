@@ -39,8 +39,8 @@ export WSM_ROOT_DIR=/your/path/to/all/resources
 
 For several reasons, we recommend you to separate `WSM_ROOT_DIR` from `PROJECT_DIR`. 
 
-### Chinese Legal Cases Dataset
-The WestLaw dataset is provided by [Kenny Zhu](http://cs.sjtu.edu.cn/~kzhu/), 
+### Chinese WestLaw Dataset
+Chinese WestLaw dataset is provided by [Kenny Zhu](http://cs.sjtu.edu.cn/~kzhu/), 
 with court records of legal cases in China in Chinese, collected from three different sources.
 
 You can download raw data, unzip all three parts as follows.
