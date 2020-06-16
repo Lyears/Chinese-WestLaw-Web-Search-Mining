@@ -1,6 +1,9 @@
 package wsm.engine.booleanIndex;
 
+import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.engine.auxiliaryIndex.IndexIdToDoc;
 import wsm.models.CourtInfo;
+import wsm.models.CourtInfoLoader;
 import wsm.utils.DiskIOHandler;
 import wsm.utils.PostingListOperation;
 import wsm.utils.QueryFieldConstructor;
@@ -9,10 +12,7 @@ import wsm.utils.QuerySplitHandler;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 
 public class IndexLocalDate extends IndexAbstract implements Serializable {
@@ -87,5 +87,39 @@ public class IndexLocalDate extends IndexAbstract implements Serializable {
     public static IndexLocalDate recoverIndexFromDisk(String fileRootPath, String keyWord){
         String fileName = fileRootPath + "/boolean_index/local_dates/" + keyWord;
         return (IndexLocalDate) DiskIOHandler.readObjectFromFile(fileName);
+    }
+
+    public static void main(String[] args) {
+        String testKey = "caseDue";
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        if (wsmRootDir == null) {
+            System.out.println("Please first set environment variable WSM_ROOT_DIR");
+            return;
+        }
+        IndexLocalDate indexLocalDate = recoverIndexFromDisk(wsmRootDir, testKey);
+        IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
+
+        List<String> queryStringList = Arrays.asList(
+                "2018年07月", "2019年8日", "2019-09-01"
+        );
+
+        for (String queryString: queryStringList) {
+            System.out.printf("Begin to query %s\n", queryString);
+            TreeSet<Integer> res = indexLocalDate.queryFromRequestString(queryString);
+            if (res == null) {
+                System.out.printf("Query Fails for %s.\n", queryString);
+                continue;
+            }
+            int count = 0;
+            for (Integer docId: res) {
+                CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
+                        indexIdToDoc.getDocFileNameFromID(docId), docId, IndexConsts.docIdOffsetList);
+                System.out.printf( "CaseCode %s, caseDue %s.\n", courtInfo.getCaseCode(), courtInfo.getCaseDue());
+                count ++;
+                if (count > 50) {
+                    break;
+                }
+            }
+        }
     }
 }

@@ -180,6 +180,5 @@ public class IndexNormalSplit extends IndexAbstract implements Serializable {
                 }
             }
         }
-
     }
 }
