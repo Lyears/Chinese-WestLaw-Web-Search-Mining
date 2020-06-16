@@ -74,6 +74,6 @@ public class IndexConsts {
         put("SIMDIF", "^");
     }};
 
-    public static float fuzzyThreshold = (float) 0.85;
-    public static float fuzzyThresholdCaseCode = (float) 0.90;
+    public static float fuzzyThreshold = (float) 0.8;
+    public static float fuzzyThresholdCaseCode = (float) 0.87;
 }

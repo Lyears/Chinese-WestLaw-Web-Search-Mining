@@ -199,18 +199,25 @@ public class BooleanIndexCollection extends IndexAbstract{
         BooleanIndexCollection booleanIndexCollection = BooleanIndexCollection.recoverIndexFromDisk(wsmRootDir);
         IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
 
-        List<String> queryStringList = Collections.singletonList("浦东新区人民法院{执行法院}");
+        List<String> queryStringList = Arrays.asList("浦东区人民法院{执行法院}",
+        "上海森海园艺发展公司 AND 戴星 ", "(514号{caseCode} OR 海丰人民法院<courtName>) AND 男{sexy}");
 
         for (String queryString: queryStringList) {
+            System.out.printf("Begin to query %s\n", queryString);
             TreeSet<Integer> res = booleanIndexCollection.queryFromRequestString(queryString);
             if (res == null) {
                 System.out.printf("Query Fails for %s.\n", queryString);
                 continue;
             }
+            int count = 0;
             for (Integer docId: res) {
                 CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
                         indexIdToDoc.getDocFileNameFromID(docId), docId, IndexConsts.docIdOffsetList);
                 System.out.println(courtInfo.toString());
+                count ++;
+                if (count > 50) {
+                    break;
+                }
             }
         }
 

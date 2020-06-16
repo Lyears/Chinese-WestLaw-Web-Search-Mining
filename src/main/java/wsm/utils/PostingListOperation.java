@@ -55,6 +55,7 @@ public class PostingListOperation {
         }
         // if postingList2 has no elements, then postingList1 does not change state
         if (postingList2 == null || postingList2.size() == 0) {
+            postingList1.clear();
             return;
         }
         postingList1.retainAll(postingList2);

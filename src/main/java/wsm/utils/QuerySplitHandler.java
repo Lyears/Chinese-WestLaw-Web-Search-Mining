@@ -112,7 +112,14 @@ public class QuerySplitHandler {
             feedback.set(2, feedback.get(2).substring(1));
         }
 
-        return feedback;
+        // filter blanks
+        ArrayList<String> feedbackFilter = new ArrayList<String>();
+        for (int i = 0; i < feedback.size(); i++) {
+            if (!feedback.get(i).isBlank()) {
+                feedbackFilter.add(feedback.get(i));
+            }
+        }
+        return feedbackFilter;
     }
 
     /**

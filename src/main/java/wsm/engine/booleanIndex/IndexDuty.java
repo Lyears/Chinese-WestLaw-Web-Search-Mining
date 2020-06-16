@@ -1,15 +1,15 @@
 package wsm.engine.booleanIndex;
 
+import wsm.engine.auxiliaryIndex.IndexConsts;
+import wsm.engine.auxiliaryIndex.IndexIdToDoc;
 import wsm.models.CourtInfo;
+import wsm.models.CourtInfoLoader;
 import wsm.utils.DiskIOHandler;
 import wsm.utils.PostingListOperation;
 import wsm.utils.QuerySplitHandler;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 
 public class IndexDuty extends IndexAbstract implements Serializable {
@@ -71,7 +71,6 @@ public class IndexDuty extends IndexAbstract implements Serializable {
                 break;
             }
         }
-        PostingListOperation.opORPostingLists(feedback, inverseIndex.get(queryString));
         return feedback;
     }
 
@@ -89,5 +88,39 @@ public class IndexDuty extends IndexAbstract implements Serializable {
     public static IndexDuty recoverIndexFromDisk(String fileRootPath){
         String fileName = fileRootPath + "/boolean_index/special_split/duty";
         return (IndexDuty) DiskIOHandler.readObjectFromFile(fileName);
+    }
+
+    public static void main(String[] args) {
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        if (wsmRootDir == null) {
+            System.out.println("Please first set environment variable WSM_ROOT_DIR");
+            return;
+        }
+        IndexDuty indexDuty = recoverIndexFromDisk(wsmRootDir);
+        IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
+
+        List<String> queryStringList = Arrays.asList(
+                "人民币，由被告承担，55134元"
+        );
+
+        for (String queryString: queryStringList) {
+            System.out.printf("Begin to query %s\n", queryString);
+            TreeSet<Integer> res = indexDuty.queryFromRequestString(queryString);
+            if (res == null) {
+                System.out.printf("Query Fails for %s.\n", queryString);
+                continue;
+            }
+            int count = 0;
+            for (Integer docId: res) {
+                CourtInfo courtInfo = CourtInfoLoader.loadCourtInfoFromDoc(
+                        indexIdToDoc.getDocFileNameFromID(docId), docId, IndexConsts.docIdOffsetList);
+                System.out.printf( "CaseCode %s, duty %s\n",
+                        courtInfo.getCaseCode(), courtInfo.getDuty());
+                count ++;
+                if (count > 50) {
+                    break;
+                }
+            }
+        }
     }
 }
