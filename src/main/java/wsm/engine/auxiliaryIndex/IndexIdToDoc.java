@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class IndexIdToDoc implements Serializable {
 
     public static final long serialVersionUID = 362498820111111111L;
+    private static final String wsmRootDir = System.getenv("WSM_ROOT_DIR");
 
     // the index Object for docId to DocFileName
     private HashMap<Integer, String> hashMapIdToDoc;
@@ -42,7 +43,8 @@ public class IndexIdToDoc implements Serializable {
         for (File docFile : files) {
             // only traverse the files, no sub-dirs
             if (docFile.isFile()) {
-                this.hashMapIdToDoc.put(docIdOffset + sequence, docFile.getAbsolutePath());
+                this.hashMapIdToDoc.put(docIdOffset + sequence,
+                        docFile.getAbsolutePath().replace(wsmRootDir, ""));
                 sequence += 1;
             }
         }
@@ -56,8 +58,15 @@ public class IndexIdToDoc implements Serializable {
      * @return the file name string
      */
     public String getDocFileNameFromID(Integer id){
-
-        return this.hashMapIdToDoc.getOrDefault(id, "");
+        String offset = hashMapIdToDoc.getOrDefault(id, "");
+        if (offset.isBlank()) {
+            return "";
+        } else if (wsmRootDir.charAt(wsmRootDir.length()-1) != '/' &&
+            offset.charAt(0) != '/'){
+            return wsmRootDir + "/" + offset;
+        } else {
+            return wsmRootDir + offset;
+        }
     }
 
     /**

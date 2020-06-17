@@ -78,8 +78,8 @@ cd $PROJECT_DIR
 
 Please set `WSM_ROOT_DIR` before executing the above gradle tasks. 
 On a computer with 32G RAM and Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz, 
-the index construction process takes about 15 minutes.
-The overall size of indices is about 970MB.
+the index construction process takes about 10 minutes.
+The overall size of indices is about 980 MB.
 
 ### Service Deployment
 
@@ -106,8 +106,7 @@ docker run -v $WSM_ROOT_DIR:/srv/wsm/root -p 8080:8080 wsm2020:0.0.1
 ```
 
 On a computer with 32G RAM, Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz and Samsung SSD 860 EVO 1TB,
-the server starting up process takes about 2 minutes, 
-mainly for index loading (from disk into memory).
+the server start-up process takes about 2 minutes, mainly for index loading (from disk into memory).
 
 ## Demo
 

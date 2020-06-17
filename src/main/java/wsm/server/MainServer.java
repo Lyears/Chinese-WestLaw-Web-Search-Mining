@@ -17,7 +17,6 @@ public class MainServer {
             throw new RuntimeException("Please first set environment variable WSM_ROOT_DIR");
         }
         SpringApplication.run(MainServer.class, args);
-
     }
 
     @Bean
