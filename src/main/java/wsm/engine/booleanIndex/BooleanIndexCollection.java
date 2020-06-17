@@ -199,7 +199,7 @@ public class BooleanIndexCollection extends IndexAbstract{
         BooleanIndexCollection booleanIndexCollection = BooleanIndexCollection.recoverIndexFromDisk(wsmRootDir);
         IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
 
-        List<String> queryStringList = Arrays.asList("浦东区人民法院{执行法院}",
+        List<String> queryStringList = Arrays.asList("浦东新区人民法院<执行法院> AND 44<age>",
         "上海森海园艺发展公司 AND 戴星 ", "(514号{caseCode} OR 海丰人民法院<courtName>) AND 男{sexy}");
 
         for (String queryString: queryStringList) {

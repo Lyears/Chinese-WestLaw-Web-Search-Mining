@@ -59,10 +59,15 @@ public class CourtInfo {
     private LocalDate caseDue;
     private String content;
 
+    public boolean isFirstData() {
+        return docId.charAt(3) == '0';
+    }
+
     /**
      * get field value bu field name, with JAVA reflect
+     *
      * @param fieldName the field Name
-     * @param object the java object
+     * @param object    the java object
      * @return the returned field
      */
     public String getFieldValueByFieldName(String fieldName, Object object) {

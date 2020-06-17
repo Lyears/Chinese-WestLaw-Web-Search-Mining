@@ -46,7 +46,7 @@ public class SearchController {
         System.out.println(searchValue);
         if (searchType.equals("boolean")) {
             List<CourtInfo> result = indexRepository.indexQuery(searchValue, sortType);
-            Page<CourtInfo> page = new Page<>(pageNum, 20, result.size(), result);
+            Page<CourtInfo> page = new Page<>(pageNum, 50, result.size(), result);
             mav.addObject("page", page);
         }
         return mav;

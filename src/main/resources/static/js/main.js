@@ -10,15 +10,19 @@ $('#sortType').children("a").click(function () {
         "page": 1
     }
     switch (sortType) {
+        case "Default Search":
+            params['sortType'] = 0
+            httpGet("/list", params)
+            break;
         case "Sorted by Age":
             params['sortType'] = 1
             httpGet("/list", params)
             break;
-        case "Sorted by Date":
+        case "Sorted by Register Date":
             params['sortType'] = 2
             httpGet("/list", params)
             break;
-        case "Sorted by Name":
+        case "Sorted by Publish Date":
             params['sortType'] = 3
             httpGet("/list", params)
             break;

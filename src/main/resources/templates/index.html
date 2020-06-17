@@ -51,9 +51,10 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display: block">Search
                     </button>
                     <div class="dropdown-menu" id="sortType">
+                        <a class="dropdown-item" href="#">Default Search</a>
                         <a class="dropdown-item" href="#">Sorted by Age</a>
-                        <a class="dropdown-item" href="#">Sorted by Date</a>
-                        <a class="dropdown-item" href="#">Sorted by Name</a>
+                        <a class="dropdown-item" href="#">Sorted by Register Date</a>
+                        <a class="dropdown-item" href="#">Sorted by Publish Date</a>
                         <a class="dropdown-item" href="#">Sorted by Fines</a>
 <!--                        <a class="dropdown-item" href="#">Sorted by Age</a>-->
                     </div>
@@ -77,5 +78,8 @@
 <script src="https://unpkg.com/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script th:src="@{/js/bootstrap.js}"></script>
 <script th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+
+</script>
 </body>
 </html>

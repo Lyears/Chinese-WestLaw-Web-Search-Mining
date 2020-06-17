@@ -60,7 +60,7 @@
                             </button>
                         </div>
 
-                        <div class="modal-body">
+                        <div class="modal-body" th:if="${court.isFirstData()}">
                             <h5>案号</h5>
                             <p th:text="${court.getCaseCode()}"></p>
                             <hr>
@@ -81,6 +81,68 @@
                             <hr>
                             <h5>联系电话</h5>
                             <p th:text="${court.getCourtPhone()}"></p>
+                        </div>
+
+                        <div class="modal-body" th:unless="${court.isFirstData()}">
+                            <h5>案号</h5>
+                            <p th:text="${court.getCaseCode()}"></p>
+                            <hr>
+                            <h5>被执行人</h5>
+                            <p th:text="${court.getIname()}"></p>
+                            <hr>
+                            <h5>年龄</h5>
+                            <p th:text="${court.getAge()}"></p>
+                            <hr>
+                            <h5>性别</h5>
+                            <p th:text="${court.getSexy()}"></p>
+                            <hr>
+                            <h5>身份证号码/组织机构代码</h5>
+                            <p th:text="${court.getCardNum()}"></p>
+                            <hr>
+                            <div th:unless="${court.getBusinessEntity()}">
+                                <h5>法人</h5>
+                                <p th:text="${court.getBusinessEntity()}"></p>
+                                <hr>
+                            </div>
+                            <h5>执行法院</h5>
+                            <p th:text="${court.getCourtName()}"></p>
+                            <hr>
+                            <h5>省份</h5>
+                            <p th:text="${court.getAreaName()}"></p>
+                            <hr>
+                            <h5>执行依据文号</h5>
+                            <p th:text="${court.getGistId()}"></p>
+                            <hr>
+                            <h5>立案时间</h5>
+                            <p th:text="${court.getRegDate()}"></p>
+                            <hr>
+                            <h5>做出执行依据单位</h5>
+                            <p th:text="${court.getGistUnit()}"></p>
+                            <hr>
+                            <h5>生效法律文书确定的义务</h5>
+                            <p th:text="${court.getDuty()}"></p>
+                            <hr>
+                            <h5>被执行人履行情况</h5>
+                            <p th:text="${court.getPerformance()}"></p>
+                            <hr>
+                            <div th:unless="${court.getPerformedPart()}">
+                                <h5>履行部分</h5>
+                                <p th:text="${court.getPerformedPart()}"></p>
+                                <hr>
+                            </div>
+                            <div th:unless="${court.getUnperformPart()}">
+                                <h5>未履行部分</h5>
+                                <p th:text="${court.getUnperformPart()}"></p>
+                                <hr>
+                            </div>
+                            <h5>被执行人行为具体情形</h5>
+                            <p th:text="${court.getDisruptTypeName()}"></p>
+                            <hr>
+                            <h5>发布时间</h5>
+                            <p th:text="${court.getPublishDate()}"></p>
+                            <hr>
+
+
                         </div>
 
                         <div class="modal-footer">
@@ -122,14 +184,32 @@
     var hasPreviousPage = [[${page.hasPreviousPage()}]]
     var buttonSize = 10
 
+    var searchURL = window.location.search
+    var pathName = window.location.pathname
+    searchURL = searchURL.substr(1, searchURL.length)
+    var urlSplits = searchURL.split('&')
+    var urlParams = {}
+    for (let i = 0; i < urlSplits.length; i++) {
+        urlParams[urlSplits[i].split('=')[0]] = urlSplits[i].split('=')[1]
+    }
+    var initUrl = function (pageNo, params) {
+        params['page'] = pageNo
+        var urlStr = pathName + '?'
+        for (var param in params) {
+            urlStr += (param + '=' + params[param] + '&')
+        }
+        return urlStr.substr(0, urlStr.length - 1)
+
+    }
+
     var initializePagination = function (paginationUI) {
         paginationUI.empty()
         var paginationItems = ''
         if (totalPages == 0 || totalCount < pageSize) {
             return
         }
-        paginationItems += ' <li id="firstPage" class="page-item"><a class="page-link" href="#">First</a></li>\n' +
-            ' <li id="prePage" class="page-item"><a class="page-link" href="#">Previous</a></li>\n'
+        paginationItems += ' <li id="firstPage" class="page-item"><a class="page-link" href=" ' + initUrl(1, urlParams) + ' ">First</a></li>\n' +
+            ' <li id="prePage" class="page-item"><a class="page-link" href="' + initUrl(curPage - 1, urlParams) + '">Previous</a></li>\n'
 
         var start = Math.floor((curPage - 2) / (buttonSize - 2)) * (buttonSize - 2)
         start = start + buttonSize > totalPages ? totalPages - buttonSize : start
@@ -137,11 +217,11 @@
 
         for (var i = start + 1; i <= start + buttonSize; i++) {
             if (i > totalPages || buttonSize < 3) break;
-            paginationItems += '<li' + (i == curPage ? ' class="page-item active"' : ' class="page-item"') + '><a class="page-link" href="#">' + i + '</a></li>'
+            paginationItems += '<li' + (i == curPage ? ' class="page-item active"' : ' class="page-item"') + '><a class="page-link" href="' + initUrl(i, urlParams) + '">' + i + '</a></li>'
         }
 
-        paginationItems += '<li id="nextPage" class="page-item"><a class="page-link" href="#">Next</a></li>\n' +
-            '<li id="lastPage" class="page-item"><a class="page-link" href="#">Last</a></li>'
+        paginationItems += '<li id="nextPage" class="page-item"><a class="page-link" href="' + initUrl(curPage + 1, urlParams) + '">Next</a></li>\n' +
+            '<li id="lastPage" class="page-item"><a class="page-link" href="' + initUrl(totalPages, urlParams) + '">Last</a></li>'
 
         paginationUI.html(paginationItems)
         if (!hasFirstPage) {

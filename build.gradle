@@ -51,12 +51,12 @@ task init_tfidf(type: JavaExec, dependsOn: compileJava) {
     main = 'wsm.utils.TfIdfUtil'
 }
 
-task init_boolean_index(type: JavaExec, dependsOn: compileJava) {
+task init_boolean_index(type: JavaExec, dependsOn: init_tfidf) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'wsm.engine.booleanIndex.BooleanIndexConstruction'
 }
 
-task initialize(dependsOn: [init_tfidf, init_boolean_index]) {
+task initialize(dependsOn: init_boolean_index) {
     doLast {
         println("initialization complete!")
     }

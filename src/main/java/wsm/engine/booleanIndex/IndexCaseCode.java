@@ -122,7 +122,7 @@ public class IndexCaseCode extends IndexAbstract implements Serializable {
         IndexIdToDoc indexIdToDoc = IndexIdToDoc.recoverIndexFromDisk(wsmRootDir);
 
         List<String> queryStringList = Arrays.asList(
-                "2013年", "（2018）沪0115执12291号", "（2018）沪0115执12290号", "2018年12290号"
+                "2013年", "（2018）沪0115执12291号", "（2018）沪0115执12290号", "2018年12290号", "(2017)沪0112执5984号"
         );
 
         for (String queryString: queryStringList) {

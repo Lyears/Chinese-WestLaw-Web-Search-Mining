@@ -3,6 +3,7 @@ package wsm.server.controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import wsm.exception.EmptyResultException;
 import wsm.exception.QueryFormatException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,4 +20,14 @@ public class GlobalExceptionController {
         mav.addObject("query", query);
         return mav;
     }
+    @ExceptionHandler(EmptyResultException.class)
+    public ModelAndView EmptyResExceptionControl(HttpServletRequest req, EmptyResultException e) {
+        String query = req.getParameter("query");
+        ModelAndView mav = new ModelAndView("index");
+        System.out.println(e.getMessage());
+        mav.addObject("exception", e);
+        mav.addObject("query", query);
+        return mav;
+    }
+
 }

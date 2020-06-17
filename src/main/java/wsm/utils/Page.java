@@ -50,7 +50,11 @@ public class Page<T> {
 
     public List<T> getCurPageData() {
         int firstIndex = (this.curPage - 1) * this.pageSize;
-        return this.data.subList(firstIndex, firstIndex + this.pageSize);
+        if (this.curPage == this.totalPages) {
+            return this.data.subList(firstIndex, data.size());
+        } else {
+            return this.data.subList(firstIndex, firstIndex + this.pageSize);
+        }
     }
 
     //The current page
