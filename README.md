@@ -31,7 +31,7 @@ cd Chinese-WestLaw-Web-Search-Mining && export PROJECT_DIR=$(pwd)
 ```
 
 Before building the project, please also set up the environment variable `WSM_ROOT_DIR` in your shell.
-This directory is the home path for all other resources, such as dataset and all the indexes constructed.
+This directory is the home path for all other resources, such as dataset and all the indices constructed.
 
 ```
 export WSM_ROOT_DIR=/your/path/to/all/resources
@@ -58,33 +58,43 @@ our project can work without any extra configuration.
 
 ## Usage
 
-### Index Construction
-
-As an typical information retrieval system, building index is necessary. 
-In this project, we build Boolean indexes for all items and vector-based TF-IDF index for instruments.
-You can construct all indexes in `WSM_ROOT_DIR` with the following commands. 
-
-```
-cd $PROJECT_DIR
-./gradlew init_tfidf && ./gradlew init_boolean_index
-```
-
-Please set `WSM_ROOT_DIR` before executing the above gradle tasks. 
-On a computer with 32G RAM and Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz, 
-the index construction process takes about 15 minutes.
-
-### Service Deployment
-
-We provide two alternatives for deploying the IR service, local deployment or docker deployment.
-For either of the above choices, you should first build the service, written by SpringBoot.
+Before using our project, build the project first.
 
 ```
 cd $PROJECT_DIR
 ./gradlew build
 ```
 
+### Index Construction
+
+As an typical information retrieval system, building index is necessary. 
+In this project, we build Boolean indices for all items and vector-based TF-IDF index for instruments.
+You can construct all indices in `WSM_ROOT_DIR` with the following commands. 
+
+```
+cd $PROJECT_DIR
+./gradlew initialize
+```
+
+Please set `WSM_ROOT_DIR` before executing the above gradle tasks. 
+On a computer with 32G RAM and Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz, 
+the index construction process takes about 15 minutes.
+The overall size of indices is about 970MB.
+
+### Service Deployment
+
+We provide two alternatives for deploying the IR service, local deployment or docker deployment.
+For either of the above choices, 
+you should first build the service, written by SpringBoot (already done by `./gradlew build`).
+
+
 For local deployment, you can directly execute the following command, 
 and the service will start at your `8080` port.
+
+```shell
+cd $PROJECT_DIR
+./gradlew bootRun
+```
 
 For docker deployment, you can first build the docker image with `docker build`,
 and then start up the service by creating a docker container.
@@ -94,6 +104,16 @@ cd $PROJECT_DIR
 docker build -t wsm2020:0.0.1 .
 docker run -v $WSM_ROOT_DIR:/srv/wsm/root -p 8080:8080 wsm2020:0.0.1 
 ```
+
+On a computer with 32G RAM, Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz and Samsung SSD 860 EVO 1TB,
+the server starting up process takes about 2 minutes, 
+mainly for index loading (from disk into memory).
+
+## Demo
+
+
+
+
 
 ## Contributors
 - [Jilai Zheng](https://github.com/zhengjilai)

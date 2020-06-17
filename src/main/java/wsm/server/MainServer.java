@@ -12,6 +12,10 @@ import wsm.server.service.InstrumentService;
 public class MainServer {
 
     public static void main(String[] args) {
+        String wsmRootDir = System.getenv("WSM_ROOT_DIR");
+        if (wsmRootDir == null) {
+            throw new RuntimeException("Please first set environment variable WSM_ROOT_DIR");
+        }
         SpringApplication.run(MainServer.class, args);
 
     }

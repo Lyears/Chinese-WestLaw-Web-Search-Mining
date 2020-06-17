@@ -9,6 +9,7 @@ import wsm.server.repository.IndexRepository;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class IndexService implements IndexRepository {
@@ -24,8 +25,24 @@ public class IndexService implements IndexRepository {
 
     @Override
     public List<CourtInfo> indexQuery(String query, int sortType) {
+        Comparator<CourtInfo> comparator = null;
+        switch (sortType) {
+            case AGE_SORT:
+                comparator = Comparator.comparing(CourtInfo::getAge, Comparator.nullsFirst(Integer::compareTo).reversed());
+                break;
+            case DATE_SORT:
+                comparator = Comparator.comparing(CourtInfo::getRegDate, Comparator.nullsFirst(LocalDate::compareTo).reversed());
+                break;
+            case NAME_SORT:
+                comparator = Comparator.comparing(CourtInfo::getIname, Comparator.nullsFirst(String::compareTo).reversed());
+                break;
+            case FINES_SORT:
+                comparator = Comparator.comparing(c -> Double.parseDouble(c.getMoney()), Comparator.nullsFirst(Double::compareTo).reversed());
+                break;
+        }
         List<String> queryStringList = Collections.singletonList(query);
-        List<CourtInfo> result = new ArrayList<>();
+        Set<CourtInfo> result = new TreeSet<>(comparator);
+
         for (String queryString : queryStringList) {
             TreeSet<Integer> res = booleanIndexCollection.queryFromRequestString(queryString);
             if (res == null) {
@@ -38,21 +55,22 @@ public class IndexService implements IndexRepository {
                 result.add(courtInfo);
             }
         }
-        switch (sortType) {
-            case AGE_SORT:
-                result.sort(Comparator.comparing(CourtInfo::getAge, Comparator.nullsFirst(Integer::compareTo).reversed()));
-                break;
-            case DATE_SORT:
-                result.sort(Comparator.comparing(CourtInfo::getRegDate, Comparator.nullsFirst(LocalDate::compareTo).reversed()));
-                break;
-            case NAME_SORT:
-                result.sort(Comparator.comparing(CourtInfo::getIname, Comparator.nullsFirst(String::compareTo).reversed()));
-                break;
-            case FINES_SORT:
-                result.sort(Comparator.comparing(c -> Double.parseDouble(c.getMoney()), Comparator.nullsFirst(Double::compareTo).reversed()));
-                break;
-        }
-        return result;
+
+//        switch (sortType) {
+//            case AGE_SORT:
+//                result.sort(Comparator.comparing(CourtInfo::getAge, Comparator.nullsFirst(Integer::compareTo).reversed()));
+//                break;
+//            case DATE_SORT:
+//                result.sort(Comparator.comparing(CourtInfo::getRegDate, Comparator.nullsFirst(LocalDate::compareTo).reversed()));
+//                break;
+//            case NAME_SORT:
+//                result.sort(Comparator.comparing(CourtInfo::getIname, Comparator.nullsFirst(String::compareTo).reversed()));
+//                break;
+//            case FINES_SORT:
+//                result.sort(Comparator.comparing(c -> Double.parseDouble(c.getMoney()), Comparator.nullsFirst(Double::compareTo).reversed()));
+//                break;
+//        }
+        return result.parallelStream().limit(1000).collect(Collectors.toList());
     }
 }
 
