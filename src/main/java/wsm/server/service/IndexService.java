@@ -1,5 +1,10 @@
 package wsm.server.service;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 import wsm.engine.auxiliaryIndex.IndexConsts;
 import wsm.engine.auxiliaryIndex.IndexIdToDoc;
 import wsm.engine.booleanIndex.BooleanIndexCollection;
@@ -11,7 +16,6 @@ import wsm.server.repository.IndexRepository;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 public class IndexService implements IndexRepository {
 
@@ -70,7 +74,7 @@ public class IndexService implements IndexRepository {
                 result.add(courtInfo);
             }
         }
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             throw new EmptyResultException("No results found!");
         }
         if (comparator != null) {

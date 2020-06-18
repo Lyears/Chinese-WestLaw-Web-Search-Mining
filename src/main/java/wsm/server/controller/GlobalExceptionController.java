@@ -24,7 +24,7 @@ public class GlobalExceptionController {
     public ModelAndView EmptyResExceptionControl(HttpServletRequest req, EmptyResultException e) {
         String query = req.getParameter("query");
         ModelAndView mav = new ModelAndView("index");
-        System.out.println(e.getMessage());
+        System.out.println(e.getDescription());
         mav.addObject("exception", e);
         mav.addObject("query", query);
         return mav;

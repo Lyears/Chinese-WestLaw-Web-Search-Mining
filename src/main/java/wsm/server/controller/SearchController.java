@@ -1,10 +1,12 @@
 package wsm.server.controller;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import wsm.exception.EmptyResultException;
 import wsm.models.CourtInfo;
 import wsm.server.repository.IndexRepository;
 import wsm.server.repository.InstrumentRepository;
@@ -22,9 +24,13 @@ public class SearchController {
     @Autowired
     private IndexRepository indexRepository;
 
+    @Autowired
+    Cache<String, Object> caffeineCache;
+
     @RequestMapping("/")
     public ModelAndView index() {
         ModelAndView mav = new ModelAndView("index");
+        mav.addObject("exception", new EmptyResultException(""));
         return mav;
     }
 
@@ -33,7 +39,6 @@ public class SearchController {
         ModelAndView mav = new ModelAndView("instruments");
 //            System.out.println(instrumentRepository.queryInstrument(searchValue).toString());
         mav.addObject("instruments", instrumentRepository.queryInstrument(searchValue));
-
         return mav;
     }
 
@@ -45,7 +50,12 @@ public class SearchController {
         ModelAndView mav = new ModelAndView("list");
         System.out.println(searchValue);
         if (searchType.equals("boolean")) {
-            List<CourtInfo> result = indexRepository.indexQuery(searchValue, sortType);
+            caffeineCache.getIfPresent(sortType + searchValue);
+            List<CourtInfo> result = (List<CourtInfo>) caffeineCache.asMap().get(sortType + searchValue);
+            if (result == null) {
+                result = indexRepository.indexQuery(searchValue, sortType);
+                caffeineCache.put(sortType + searchValue, result);
+            }
             Page<CourtInfo> page = new Page<>(pageNum, 50, result.size(), result);
             mav.addObject("page", page);
         }
