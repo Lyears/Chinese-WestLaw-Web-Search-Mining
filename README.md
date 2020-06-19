@@ -145,8 +145,8 @@ Example Boolean query strings is listed and demonstrated in the following table.
 
 | Query string | Explanation |
 | :----- | :----- |
-| `44` | A one-shot query, viewing the query string as a complete query instance for any attributes | 
-| `44<age>` | A Boolean query, only searching for those cases that have the age field as 44 |
+| 44 | A one-shot query, viewing the query string as a complete query instance for any attributes | 
+| 44 &lt age &gt | A Boolean query, only searching for those cases that have the age field as 44 |
 | `44<age> AND 2012<regDate>` | A Boolean query, searching for legal cases both have 44 as age and register in 2012 |
 | `44<age> OR (2012<regDate> SUB 55<age>)` | A Boolean query, searching for legal cases that have 44 as age, or register in 2012 but do not have age as 55 | 
 
