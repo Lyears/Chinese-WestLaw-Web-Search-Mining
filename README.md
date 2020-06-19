@@ -10,7 +10,7 @@ The retrieval system will return all cases that satisfy the conditions specified
 The project provides the following functionalities.
 - a boolean retrieval interface for law cases (fuzzy supported)
 - a vector-based retrieval interface for instruments of law cases
-- an option of sorting all law cases retrieved by some specific items
+- an option of sorting all law cases retrieved by some specific attributes
 - a pleasant frontend
 
 ## Prerequisites
@@ -65,7 +65,7 @@ cd $PROJECT_DIR
 
 ### Index Construction
 
-As an typical information retrieval system, building index is necessary. 
+As a typical information retrieval system, building index is necessary. 
 In this project, we build Boolean indices for all items and vector-based TF-IDF index for instruments.
 You can construct all indices in `WSM_ROOT_DIR` with the following commands. 
 
@@ -81,12 +81,11 @@ The overall size of indices is about 980 MB.
 
 ### Service Deployment
 
-We provide two alternatives for deploying the IR service, local deployment or docker deployment.
+We provide two alternatives for deploying the service, respectively local deployment or docker deployment.
 For either of the above choices, 
 you should first build the service, written by SpringBoot (already done by `./gradlew build`).
 
-
-For local deployment, you can directly execute the following command, 
+For local deployment, you can directly execute the following gradle task, 
 and the service will start at your `8080` port.
 
 ```shell
@@ -94,7 +93,7 @@ cd $PROJECT_DIR
 ./gradlew bootRun
 ```
 
-For docker deployment, you can first build the docker image with `docker build`,
+For docker deployment, you should first build the docker image with `docker build`,
 and then start up the service by creating a docker container.
 
 ```shell
@@ -119,18 +118,18 @@ Users can choose Boolean search or instrument retrieval as they want on home pag
 type the target query string in the bar, 
 and select some attributes (e.g. age, fine, regDate) for sorting before querying. 
 A list of legal cases will be returned after users click the search button, 
-and meta data of all retrieved legal cases can be demonstrated in detail. 
+and meta-data of all retrieved legal cases can be demonstrated in detail. 
 
 Note that we implement the server with SpringBoot framework (Java), 
 and the frontend with BootStrap and jQuery framework (HTML, CSS, JavaScript). 
-Our website is constructed based on MVC architecture.
+Our website is built based on MVC architecture.
 
 ### Query String Format
 
 For instrument query, you simply need to type any sentences you need. 
 There is no strict format for instrument query.
 
-For Boolean query, we support two formats valid to query string.
+However for Boolean query, we support two formats valid to query string.
 - one-shot query string, namely any query string without any predicates for Boolean retrieval
 - Boolean query string, namely a query string following the format of set operation and attribute identification.
 
@@ -141,23 +140,23 @@ Set operations `OP` involving `AND`, `OR`, `SUB` and `XOR` integrates
 the result of all Boolean query units in the query string. 
 Brackets can be utilized to change the priority of set calculation.
 
-Example Boolean query strings is listed and demonstrated in the following table.
+Example Boolean query strings are listed and demonstrated in the following table.
 
 | Query string | Explanation |
 | :----- | :----- |
-| `44` | A one-shot query, viewing the query string as a complete query instance for any attributes | 
-| `44<age>` | A Boolean query, only searching for those cases that have the age field as 44 |
-| `44<age> AND 2012y<regDate>` | A Boolean query, searching for legal cases both have 44 as age and register in 2012 |
-| `44<age> OR (2012y5m06d<regDate> SUB 55<age>)` | A Boolean query, searching for legal cases that have 44 as age, or register in 2012-05-06 but do not have age as 55 | 
+| `44` | A one-shot query, viewing the query string as a complete query instance for any attributes. | 
+| `44<age>` | A Boolean query, only searching for those cases that have the age field as 44. |
+| `44<age> AND 2012y<regDate>` | A Boolean query, searching for legal cases both have 44 as age and register in 2012. |
+| `44<age> OR (2012y5m06d<regDate> SUB 55<age>)` | A Boolean query, searching for legal cases that have 44 as age, or register in 2012-05-06 but do not have age as 55. | 
 
 About the fields available in our system, 
 you can refer to `$PROJECT_DIR/src/main/resources/README.txt` or 
 `$PROJECT_DIR/src/main/java/wsm/engine/auxiliaryIndex/IndexConsts.java` for details. 
 Both Chinese and English field names are supported. 
 
-Also note that since brackets are reserved for priority, 
+Also note that since English brackets are reserved for priority, 
 you should replace English brackets with Chinese brackets 
-in Boolean query string if brackets are required in attribute values.
+in Boolean query string if English brackets are required in attribute values.
 
 ## Contributors
 - [Jilai Zheng](https://github.com/zhengjilai)
