@@ -80,6 +80,7 @@ public class IndexService implements IndexRepository {
         if (comparator != null) {
             result.sort(comparator);
         }
+        System.out.println(result.size());
         return result.parallelStream().limit(500).collect(Collectors.toList());
     }
 }

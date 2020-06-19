@@ -48,7 +48,7 @@ public class SearchController {
                                      @RequestParam("searchValue") String searchValue,
                                      @RequestParam("page") int pageNum) {
         ModelAndView mav = new ModelAndView("list");
-        System.out.println(searchValue);
+//        System.out.println(searchValue);
         if (searchType.equals("boolean")) {
             caffeineCache.getIfPresent(sortType + searchValue);
             List<CourtInfo> result = (List<CourtInfo>) caffeineCache.asMap().get(sortType + searchValue);
