@@ -107,17 +107,23 @@ docker run -v $WSM_ROOT_DIR:/srv/wsm/root -p 8080:8080 wsm2020:0.0.1
 On a computer with 32G RAM, Intel(R) Core(TM) i7-8700K CPU @ 3.70GHz and Samsung SSD 860 EVO 1TB,
 the server start-up process takes about 2 minutes, mainly for index loading (from disk into memory).
 
-## Web Interface and Demo
+## Web Interface
+
+### Demo
 
 Users can visit the homepage of our system by any web browsers. 
 The overview of our system is demonstrated as follows.
 
-![image](https://github.com/zhengjilai/Chinese-WestLaw-Web-Search-Mining/blob/master/fig/overview.png)
+![overview](https://github.com/zhengjilai/Chinese-WestLaw-Web-Search-Mining/blob/master/fig/web_interface.png)
 
 Users can choose Boolean search or instrument retrieval as they want on home page, 
 type the target query string in the bar, and select some attributes (e.g. age, fine, regDate) for sorting before querying. 
 A list of legal cases will be returned after users click the search button, 
 and meta data of all retrieved legal cases can be demonstrated in detail. 
+
+### Query String Format
+
+
 
 ## Contributors
 - [Jilai Zheng](https://github.com/zhengjilai)
