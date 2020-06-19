@@ -19,7 +19,6 @@ The project provides the following functionalities.
 Our system has the following requirements.
 - JDK 11
 - Gradle, version 6.4.1
-- git
 
 ### Project Preparations
 
@@ -114,12 +113,17 @@ the server start-up process takes about 2 minutes, mainly for index loading (fro
 Users can visit the homepage of our system by any web browsers. 
 The overview of our system is demonstrated as follows.
 
-![overview](https://github.com/zhengjilai/Chinese-WestLaw-Web-Search-Mining/blob/master/fig/web_interface.png)
+<a href="url"><img src="https://github.com/zhengjilai/Chinese-WestLaw-Web-Search-Mining/blob/master/fig/web_interface.png" align="middle" width="400" ></a>
 
 Users can choose Boolean search or instrument retrieval as they want on home page, 
-type the target query string in the bar, and select some attributes (e.g. age, fine, regDate) for sorting before querying. 
+type the target query string in the bar, 
+and select some attributes (e.g. age, fine, regDate) for sorting before querying. 
 A list of legal cases will be returned after users click the search button, 
 and meta data of all retrieved legal cases can be demonstrated in detail. 
+
+Note that we implement the server with SpringBoot framework (Java), 
+and the frontend with BootStrap and jQuery framework (HTML, CSS, JavaScript). 
+Our website is constructed based on MVC architecture.
 
 ### Query String Format
 
