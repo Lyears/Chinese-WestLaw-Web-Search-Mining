@@ -157,7 +157,7 @@ Both Chinese and English field names are supported.
 
 Also note that since brackets are reserved for priority, 
 you should replace English brackets with Chinese brackets 
-in Boolean query string if brackets are required in query.
+in Boolean query string if brackets are required in attribute values.
 
 ## Contributors
 - [Jilai Zheng](https://github.com/zhengjilai)
