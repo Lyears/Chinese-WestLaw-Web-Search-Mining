@@ -113,7 +113,7 @@ the server start-up process takes about 2 minutes, mainly for index loading (fro
 Users can visit the homepage of our system by any web browsers. 
 The overview of our system is demonstrated as follows.
 
-<a href="url"><img src="https://github.com/zhengjilai/Chinese-WestLaw-Web-Search-Mining/blob/master/fig/web_interface.png" align="middle" width="400" ></a>
+<a href="url"><img src="https://github.com/zhengjilai/Chinese-WestLaw-Web-Search-Mining/blob/master/fig/web_interface.png" align="middle" width="800" ></a>
 
 Users can choose Boolean search or instrument retrieval as they want on home page, 
 type the target query string in the bar, 
@@ -127,7 +127,38 @@ Our website is constructed based on MVC architecture.
 
 ### Query String Format
 
+For instrument query, you simply need to type any sentences you need. 
+There is no strict format for instrument query.
 
+For Boolean query, we support two formats valid to query string.
+- one-shot query string, namely any query string without any predicates for Boolean retrieval
+- Boolean query string, namely a query string following the format of set operation and attribute identification.
+
+A general Boolean query string follows the format of `value<field> OP value<field> [...]`. 
+Here `value<field>` as a Boolean query unit indicates
+ searching for legal cases that has key word `value` in their attribute `field`.
+Set operations `OP` involving `AND`, `OR`, `SUB` and `XOR` integrates 
+the result of all Boolean query units in the query string. 
+Brackets can be utilized to change the priority of set calculation.
+
+Example Boolean query strings is listed and demonstrated in the follwing table.
+
+| Query string | Explanation |
+| :----- | :----: |
+| 44 | A one-shot query, viewing the query string as a complete query instance for any attributes | 
+| 44<age> | A Boolean query, only searching for those cases that have the age field as 44 |
+| 44<age> AND 2012<regDate> | A Boolean query, searching for legal cases both have 44 as age and register in 2012 |
+| 44<age> OR (2012<regDate> SUB 55<age>) | A Boolean query, searching for legal cases 
+that have 44 as age, or register in 2012 but do not have age as 55 | 
+
+About the fields available in our system, 
+you can refer to `$PROJECT_DIR/src/main/resources/README.txt` or 
+`$PROJECT_DIR/src/main/java/wsm/engine/auxiliaryIndex/IndexConsts.java` for details. 
+Both Chinese and English fields are supported. 
+
+Also note that since bracket is reserved for priority, 
+you should replace English brackets with Chinese brackets 
+in Boolean query string if brackets is required in query.
 
 ## Contributors
 - [Jilai Zheng](https://github.com/zhengjilai)
