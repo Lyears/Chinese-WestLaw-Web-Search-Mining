@@ -73,7 +73,7 @@ public class QuerySplitHandler {
         String yearPattern1 = "\\([\\d]*\\)";
         Pattern regex = Pattern.compile(yearPattern1);
         Matcher match = regex.matcher(filteredString);
-        String yearPattern2 = "[\\d]*年";
+        String yearPattern2 = "[\\d]*[年,y]";
         Pattern regex2 = Pattern.compile(yearPattern2);
         Matcher match2 = regex2.matcher(filteredString);
         if (match.find()){
